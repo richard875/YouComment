@@ -103,7 +103,6 @@ function brInStr(str) {
 }
 
 // Dummy Data
-
 var fakeDate = {
   totalResults: 2,
   videoID: "",
@@ -151,8 +150,273 @@ var fakeDate = {
   ],
 };
 
-var newId = Object.keys(fakeDate.comments).length;
-$("#commentNumber").html(newId + " Comments");
+function fetchData() {
+  const url =
+    "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/abc123";
+  fetch(url)
+    .then((resp) => resp.json())
+    .then((data) => {
+      console.log(data);
+      var newId = Object.keys(data).length;
+      $("#commentNumber").html(newId + " Comments");
+      var rendered = data.map((comment) => {
+        singleComment = `
+          <!-- Each comments -->
+          <div class="comments">
+            <div class="commentProfileFrame">
+              <img
+                class="userProfilePicFrame"
+                style="margin-top: 1rem;"
+                src="${comment.profilePicture}"
+              />
+            </div>
+            <div class="commentRight">
+              <div class="nameAndTime">
+                <div style="letter-spacing: 0.03rem;">
+                  <b>${comment.user.firstName} ${comment.user.lastName}</b>
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div style="color: #909090;">
+                  ${timeSince(Date.parse(comment.createdAt))} ago
+                </div>
+              </div>
+              <!-- White space -->
+              <div style="width: 100%; height: 1rem;"></div>
+        ${
+          brInStr(comment.body) > 3
+            ? `
+          <div class="userCommentBox" style="height: 6em;">
+            ${comment.body}
+          </div>
+          <div class="comReadMore" onclick="readMore(this)">
+            Read more
+          </div>
+          <div class="comReadLess" onclick="readLess(this)">
+            Show less
+          </div>
+          `
+            : `
+          <div class="userCommentBox">
+            ${comment.body}
+          </div>
+
+          <div class="comReadMore" style="display: none;" onclick="readMore(this)">
+            Read more
+          </div>
+          <div class="comReadLess" onclick="readLess(this)">
+            Show less
+          </div>
+          `
+        }
+              <!-- White space -->
+              <div style="width: 100%; height: 1rem;"></div>
+              <div class="likeDislikeComment">
+                <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+                  <i
+                    class="fa fa-thumbs-up"
+                    style="font-size: 1.3rem;"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="tUptooltiptext">Like</span>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div class="tUpCount">${comment.reviews.likes}</div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+                  <i
+                    class="fa fa-thumbs-down"
+                    style="font-size: 1.3rem; transform: scale(-1, 1);"
+                    aria-hidden="true"
+                  ></i
+                  ><span class="tDowntooltiptext">Dislike</span>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
+              </div>
+              <!-- 1 -->
+              <div class="replyAddComment">
+                <div class="userProfileFrame">
+                  <img
+                    class="userProfilePicFrame"
+                    style="margin-top: 0.6rem;"
+                    src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+                  />
+                </div>
+                <div class="addCommentRight">
+                  <textarea
+                    placeholder="Add a public reply..."
+                    class="commentInput"
+                    onfocus="textExpand(this)"
+                  ></textarea>
+                  <div class="runderline"></div>
+                  <div id="replyCommentButtonBox">
+                    <div class="replyCancelButton" onclick="replyCancel(this)">
+                      CANCEL
+                    </div>
+                    <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
+                      REPLY
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="newComments"></div>
+
+        `;
+
+        if (!(comment.replies === undefined || comment.replies.length == 0)) {
+          singleComment += `
+          <div
+            class="showReplies"
+            onclick="showReplies(this)"
+            style="
+              color: #085fd4;
+              font-size: 1.4rem;
+              cursor: pointer;
+              margin-top: 1rem;
+              user-select: none; /* supported by Chrome and Opera */
+              -webkit-user-select: none; /* Safari */
+              -khtml-user-select: none; /* Konqueror HTML */
+              -moz-user-select: none; /* Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+            "
+            >
+              <i class="fas fa-caret-down"></i>&nbsp;&nbsp;&nbsp;View ${
+                Object.keys(comment.replies).length
+              } ${
+            Object.keys(comment.replies).length == 1 || 0 ? "reply" : "replies"
+          }
+          </div>
+          <div
+            class="hideReplies"
+            onclick="hideReplies(this)"
+            style="
+              color: #085fd4;
+              font-size: 1.4rem;
+              cursor: pointer;
+              display: none;
+              margin-top: 1rem;
+              user-select: none; /* supported by Chrome and Opera */
+              -webkit-user-select: none; /* Safari */
+              -khtml-user-select: none; /* Konqueror HTML */
+              -moz-user-select: none; /* Firefox */
+              -ms-user-select: none; /* Internet Explorer/Edge */
+            "
+            >
+              <i class="fas fa-caret-up"></i>&nbsp;&nbsp;&nbsp;Hide ${
+                Object.keys(comment.replies).length
+              } ${
+            Object.keys(comment.replies).length == 1 || 0 ? "reply" : "replies"
+          }
+          </div>
+          <div class="allReplyOnComment">
+          <!-- White space -->
+          <div style="width: 100%; height: 1rem;"></div>
+          `;
+          comment.replies.map((reply) => {
+            singleComment += `
+            <div class="replyOnComment">
+          <div class="replyOnCommentProfileFrame">
+            <img
+              class="replyOnCommentProfilePicFrame"
+              style="margin-top: 1rem;"
+              src="${reply.profilePicture}"
+            />
+          </div>
+          <div class="replyOnCommentRight" style="margin: 1.5rem;">
+            <div class="nameAndTime">
+              <div style="letter-spacing: 0.03rem;"><b>${
+                reply.user.firstName
+              } ${reply.user.lastName}</b></div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              <div style="color: #909090;">${timeSince(
+                Date.parse(reply.createdAt)
+              )} ago</div>
+            </div>
+            <!-- White space -->
+            <div style="width: 100%; height: 1rem;"></div>
+            ${
+              brInStr(reply.body) > 3
+                ? `
+            <div class="replyCommentBox" style="height: 6em;">${reply.body}</div>
+            <div class="repReadMore" onclick="readMore(this)">Read more</div>
+            <div class="repReadLess" onclick="readLess(this)">Show less</div>
+            `
+                : `
+                <div class="replyCommentBox">${reply.body}</div>
+                <div class="repReadMore" style="display: none;" onclick="readMore(this)">Read more</div>
+                <div class="repReadLess" onclick="readLess(this)">Show less</div>
+                `
+            }
+            <!-- White space -->
+            <div style="width: 100%; height: 1rem;"></div>
+            <div class="likeDislikeComment">
+              <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+                <i
+                  class="fa fa-thumbs-up"
+                  style="font-size: 1.3rem;"
+                  aria-hidden="true"
+                ></i>
+                <span class="tUptooltiptext">Like</span>
+              </div>
+              &nbsp;&nbsp;&nbsp;
+              <div class="tUpCount">0</div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+                <i
+                  class="fa fa-thumbs-down"
+                  style="font-size: 1.3rem; transform: scale(-1, 1);"
+                  aria-hidden="true"
+                ></i
+                ><span class="tDowntooltiptext">Dislike</span>
+              </div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div style="cursor: pointer;" class="replyReplyComment" onclick="reply(this)">
+                REPLY
+              </div>
+            </div>
+            <!-- Write comment section -->
+            <div class="replyAddReply">
+              <div class="userProfileFrame">
+                <img
+                  class="userProfilePicFrame"
+                  style="width: 30px; height: 30px; margin-top: 0.6rem;"
+                  src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+                />
+              </div>
+              <div class="addCommentRight">
+                <textarea
+                  placeholder="Add a public comment..."
+                  class="commentInput"
+                  onfocus="textExpand(this)"
+                ></textarea>
+                <div class="runderline"></div>
+                <div id="replyReplyButtonBox">
+                  <div class="replyReplyCancelButton" onclick="replyCancel(this)">
+                    CANCEL
+                  </div>
+                  <div id="commentButton" onclick="newReplyComment(this)">
+                    COMMENT
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            `;
+          });
+        }
+
+        singleComment += `</div></div></div>`;
+
+        return singleComment;
+      });
+      $(`#commentSection`).prepend(rendered);
+    })
+    .catch(function (error) {
+      console.log(JSON.stringify(error));
+    });
+}
+fetchData();
 
 function textAreaFocus() {
   $("#commentButtonBox").css("display", "flex");
@@ -491,260 +755,6 @@ function newReplyComment(e) {
   }
 }
 
-var rendered = fakeDate.comments.map((comment) => {
-  singleComment = `
-    <!-- Each comments -->
-    <div class="comments">
-      <div class="commentProfileFrame">
-        <img
-          class="userProfilePicFrame"
-          style="margin-top: 1rem;"
-          src="${comment.profilePicture}"
-        />
-      </div>
-      <div class="commentRight">
-        <div class="nameAndTime">
-          <div style="letter-spacing: 0.03rem;">
-            <b>${comment.user.firstName} ${comment.user.lastName}</b>
-          </div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div style="color: #909090;">
-            ${timeSince(Date.parse(comment.createdAt))} ago
-          </div>
-        </div>
-        <!-- White space -->
-        <div style="width: 100%; height: 1rem;"></div> 
-  ${
-    brInStr(comment.body) > 3
-      ? `
-    <div class="userCommentBox" style="height: 6em;">
-      ${comment.body}
-    </div>
-    <div class="comReadMore" onclick="readMore(this)">
-      Read more
-    </div>
-    <div class="comReadLess" onclick="readLess(this)">
-      Show less
-    </div>
-    `
-      : `
-    <div class="userCommentBox">
-      ${comment.body}
-    </div>
-
-    <div class="comReadMore" style="display: none;" onclick="readMore(this)">
-      Read more
-    </div>
-    <div class="comReadLess" onclick="readLess(this)">
-      Show less
-    </div>
-    `
-  }
-        <!-- White space -->
-        <div style="width: 100%; height: 1rem;"></div>
-        <div class="likeDislikeComment">
-          <div class="tUp" onclick="tUp(this)" style="color: #909090;">
-            <i
-              class="fa fa-thumbs-up"
-              style="font-size: 1.3rem;"
-              aria-hidden="true"
-            ></i>
-            <span class="tUptooltiptext">Like</span>
-          </div>
-          &nbsp;&nbsp;&nbsp;
-          <div class="tUpCount">${comment.review.likes}</div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div class="tDown" onclick="tDown(this)" style="color: #909090;">
-            <i
-              class="fa fa-thumbs-down"
-              style="font-size: 1.3rem; transform: scale(-1, 1);"
-              aria-hidden="true"
-            ></i
-            ><span class="tDowntooltiptext">Dislike</span>
-          </div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
-        </div>
-        <!-- 1 -->
-        <div class="replyAddComment">
-          <div class="userProfileFrame">
-            <img
-              class="userProfilePicFrame"
-              style="margin-top: 0.6rem;"
-              src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
-            />
-          </div>
-          <div class="addCommentRight">
-            <textarea
-              placeholder="Add a public reply..."
-              class="commentInput"
-              onfocus="textExpand(this)"
-            ></textarea>
-            <div class="runderline"></div>
-            <div id="replyCommentButtonBox">
-              <div class="replyCancelButton" onclick="replyCancel(this)">
-                CANCEL
-              </div>
-              <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
-                REPLY
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="newComments"></div>
-        
-  `;
-
-  if (!(comment.replies === undefined || comment.replies.length == 0)) {
-    singleComment += `
-    <div
-      class="showReplies"
-      onclick="showReplies(this)"
-      style="
-        color: #085fd4;
-        font-size: 1.4rem;
-        cursor: pointer;
-        margin-top: 1rem;
-        user-select: none; /* supported by Chrome and Opera */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-      "
-      >
-        <i class="fas fa-caret-down"></i>&nbsp;&nbsp;&nbsp;View ${
-          Object.keys(comment.replies).length
-        } ${Object.keys(comment.replies).length == 1 || 0 ? "reply" : "replies"}
-    </div>
-    <div
-      class="hideReplies"
-      onclick="hideReplies(this)"
-      style="
-        color: #085fd4;
-        font-size: 1.4rem;
-        cursor: pointer;
-        display: none;
-        margin-top: 1rem;
-        user-select: none; /* supported by Chrome and Opera */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-      "
-      >
-        <i class="fas fa-caret-up"></i>&nbsp;&nbsp;&nbsp;Hide ${
-          Object.keys(comment.replies).length
-        } ${Object.keys(comment.replies).length == 1 || 0 ? "reply" : "replies"}
-    </div>
-    <div class="allReplyOnComment">
-    <!-- White space -->
-    <div style="width: 100%; height: 1rem;"></div>
-    `;
-    comment.replies.map((reply) => {
-      singleComment += `
-      <div class="replyOnComment">
-    <div class="replyOnCommentProfileFrame">
-      <img
-        class="replyOnCommentProfilePicFrame"
-        style="margin-top: 1rem;"
-        src="${reply.profilePicture}"
-      />
-    </div>
-    <div class="replyOnCommentRight" style="margin: 1.5rem;">
-      <div class="nameAndTime">
-        <div style="letter-spacing: 0.03rem;"><b>${reply.user.firstName} ${
-        reply.user.lastName
-      }</b></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div style="color: #909090;">${timeSince(
-          Date.parse(reply.createdAt)
-        )} ago</div>
-      </div>
-      <!-- White space -->
-      <div style="width: 100%; height: 1rem;"></div>
-      ${
-        brInStr(reply.body) > 3
-          ? `
-      <div class="replyCommentBox" style="height: 6em;">${reply.body}</div>
-      <div class="repReadMore" onclick="readMore(this)">Read more</div>
-      <div class="repReadLess" onclick="readLess(this)">Show less</div>
-      `
-          : `
-          <div class="replyCommentBox">${reply.body}</div>
-          <div class="repReadMore" style="display: none;" onclick="readMore(this)">Read more</div>
-          <div class="repReadLess" onclick="readLess(this)">Show less</div>
-          `
-      }
-      <!-- White space -->
-      <div style="width: 100%; height: 1rem;"></div>
-      <div class="likeDislikeComment">
-        <div class="tUp" onclick="tUp(this)" style="color: #909090;">
-          <i
-            class="fa fa-thumbs-up"
-            style="font-size: 1.3rem;"
-            aria-hidden="true"
-          ></i>
-          <span class="tUptooltiptext">Like</span>
-        </div>
-        &nbsp;&nbsp;&nbsp;
-        <div class="tUpCount">${reply.review.likes}</div>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div class="tDown" onclick="tDown(this)" style="color: #909090;">
-          <i
-            class="fa fa-thumbs-down"
-            style="font-size: 1.3rem; transform: scale(-1, 1);"
-            aria-hidden="true"
-          ></i
-          ><span class="tDowntooltiptext">Dislike</span>
-        </div>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div style="cursor: pointer;" class="replyReplyComment" onclick="reply(this)">
-          REPLY
-        </div>
-      </div>
-      <!-- Write comment section -->
-      <div class="replyAddReply">
-        <div class="userProfileFrame">
-          <img
-            class="userProfilePicFrame"
-            style="width: 30px; height: 30px; margin-top: 0.6rem;"
-            src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
-          />
-        </div>
-        <div class="addCommentRight">
-          <textarea
-            placeholder="Add a public comment..."
-            class="commentInput"
-            onfocus="textExpand(this)"
-          ></textarea>
-          <div class="runderline"></div>
-          <div id="replyReplyButtonBox">
-            <div class="replyReplyCancelButton" onclick="replyCancel(this)">
-              CANCEL
-            </div>
-            <div id="commentButton" onclick="newReplyComment(this)">
-              COMMENT
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-      `;
-    });
-  }
-
-  singleComment += `</div></div></div>`;
-
-  return singleComment;
-});
-
-// var renderedJS = fakeDate.comments.map((comment) => {});
-
-$(`#commentSection`).prepend(rendered);
-// $(`#importS`).prepend(renderedJS);
-
-//$("#frontJS").prepend(`
 function showReplies(e) {
   $(e).next().next().css("display", "flex");
   $(e).css("display", "none");
@@ -854,5 +864,3 @@ function tDown(e) {
       break;
   }
 }
-
-//  `);
