@@ -156,8 +156,8 @@ function fetchData() {
   fetch(url)
     .then((resp) => resp.json())
     .then((data) => {
-      console.log(data);
-      var newId = Object.keys(data).length;
+      //console.log(data);
+      newId = Object.keys(data).length;
       $("#commentNumber").html(newId + " Comments");
       var rendered = data.map((comment) => {
         singleComment = `
@@ -358,8 +358,8 @@ function fetchData() {
                 ></i>
                 <span class="tUptooltiptext">Like</span>
               </div>
-              &nbsp;&nbsp;&nbsp;
-              <div class="tUpCount">0</div>
+              <!-- &nbsp;&nbsp;&nbsp; -->
+              <div class="tUpCount" style="display: none;">0</div>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <div class="tDown" onclick="tDown(this)" style="color: #909090;">
                 <i
@@ -411,12 +411,29 @@ function fetchData() {
         return singleComment;
       });
       $(`#commentSection`).prepend(rendered);
-    })
-    .catch(function (error) {
-      console.log(JSON.stringify(error));
     });
+
+  // .catch(function (error) {
+  //   console.log(JSON.stringify(error));
+  // });
 }
+
 fetchData();
+
+function getLength() {
+  return new Promise((resolve) => {
+    //setTimeout(() => {
+    const url =
+      "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/abc123";
+    fetch(url)
+      .then((resp) => resp.json())
+      .then((data) => {
+        const newId = Object.keys(data).length;
+        resolve(newId);
+        //}, 5000);
+      });
+  });
+}
 
 function textAreaFocus() {
   $("#commentButtonBox").css("display", "flex");
@@ -429,8 +446,56 @@ $("#cancelButton").click(function () {
   $("#commentInput").val("");
 });
 
-$("#commentButton").click(function () {
+$("#commentButton").click(async function () {
   var txt = $("#commentInput").val();
+  //var newId = await getLength();
+  var newId = 100;
+
+  var settings = {
+    url:
+      "https://stark-plains-79911.herokuapp.com/https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/createVideo",
+    method: "POST",
+    timeout: 0,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify({
+      videoID: "abc123",
+      profilePicture:
+        "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
+      user: { firstName: "Sam", lastName: "Jones" },
+      body:
+        "Now <br />I can say:<br />Sussessful!!!<br />Sussessful!!!<br />Sussessful!!!<br />Sussessful!!!",
+    }),
+  };
+
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+  });
+
+  // const proxy = "https://stark-plains-79911.herokuapp.com/";
+  // const url =
+  //   "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/post";
+
+  // const toPost = {
+  //   videoID: "abc123",
+  //   profilePicture:
+  //     "https://e0.365dm.com/20/07/768x432/skysports-lewis-hamilton-f1_5043765.jpg?20200719142248",
+  //   user: { firstName: "Lewis", lastName: "Hamilton" },
+  //   body: "123",
+  // };
+
+  // $.ajax({
+  //   type: "POST",
+  //   url: proxy + url,
+  //   //crossDomain: true,
+  //   data: toPost,
+  //   contentType: "application/json",
+  //   dataType: "json",
+  //   success: function (data, status) {
+  //     alert("Data: " + data + "\nStatus: " + status);
+  //   },
+  // });
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
     txt = txt.replace(/(\r\n|\n)/g, "<br />");
