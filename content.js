@@ -461,32 +461,3 @@
 // $("#${comment.id}replyReplyCancelButton${reply.replyId}").click(function () {
 //   $("#${comment.id}replyAddReply${reply.replyId}").css("display", "none");
 // });
-
-$(document).ready(function () {
-  $("#submit").click(function (e) {
-    e.preventDefault();
-    var name = $("#name").val(),
-      email = $("#email").val(),
-      message = $("#message").val();
-    $.ajax({
-      type: "POST",
-      url: "https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Done",
-      contentType: "application/json",
-      data: JSON.stringify({
-        name: name,
-        email: email,
-        message: message,
-      }),
-      success: function (res) {
-        $("#form-response").html(
-          '<div class="alert alert-info" role="alert">Welcome to the queue! Your path will begin shortly...</div>'
-        );
-      },
-      error: function () {
-        $("#form-response").html(
-          '<div class="alert alert-info" role="alert">Something went wrong... We are working on it!</div>'
-        );
-      },
-    });
-  });
-});

@@ -158,7 +158,8 @@ function fetchData() {
     .then((data) => {
       //console.log(data);
       newId = Object.keys(data).length;
-      $("#commentNumber").html(newId + " Comments");
+      comm = newId > 1 ? " Comments" : " Comment";
+      $("#commentNumber").html(newId + comm);
       var rendered = data.map((comment) => {
         singleComment = `
           <!-- Each comments -->
@@ -354,7 +355,7 @@ function fetchData() {
             <!-- White space -->
             <div style="width: 100%; height: 1rem;"></div>
             <div class="likeDislikeComment">
-              <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+              <div class="tUp" onclick="tUpMock(this)" style="color: #909090;">
                 <i
                   class="fa fa-thumbs-up"
                   style="font-size: 1.3rem;"
@@ -365,7 +366,7 @@ function fetchData() {
               <!-- &nbsp;&nbsp;&nbsp; -->
               <div class="tUpCount" style="display: none;">0</div>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+              <div class="tDown" onclick="tDownMock(this)" style="color: #909090;">
                 <i
                   class="fa fa-thumbs-down"
                   style="font-size: 1.3rem; transform: scale(-1, 1);"
@@ -374,10 +375,11 @@ function fetchData() {
                 ><span class="tDowntooltiptext">Dislike</span>
               </div>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div style="cursor: pointer;" class="replyReplyComment" onclick="reply(this)">
+              <div style="cursor: pointer;" class="replyReplyComment" onclick="replyToComment(this)">
                 REPLY
               </div>
             </div>
+            <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
             <!-- Write comment section -->
             <div class="replyAddReply">
               <div class="userProfileFrame">
@@ -395,7 +397,7 @@ function fetchData() {
                 ></textarea>
                 <div class="runderline"></div>
                 <div id="replyReplyButtonBox">
-                  <div class="replyReplyCancelButton" onclick="replyCancel(this)">
+                  <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
                     CANCEL
                   </div>
                   <div id="commentButton" onclick="newReplyComment(this)">
@@ -585,25 +587,34 @@ $("#commentButton").click(async function () {
       //newId++;
     });
   }
-
-  // $.ajax({
-  //   type: "POST",
-  //   url: proxy + url,
-  //   //crossDomain: true,
-  //   data: toPost,
-  //   contentType: "application/json",
-  //   dataType: "json",
-  //   success: function (data, status) {
-  //     alert("Data: " + data + "\nStatus: " + status);
-  //   },
-  // });
 });
 
 function replyOnComment(e) {
   var txt = $(e).parent().prev().prev().val();
+  txt = txt.replace(/(\r\n|\n)/g, "<br />");
+  var video = $(e).parent().parent().parent().next().attr("id");
+  var createSort = $(e).parent().parent().parent().next().next().attr("id");
+  var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${video}/timeStamp/${createSort}`;
+
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
-    $(e).parent().parent().parent().next().prepend(`
+    var settings = {
+      url: url,
+      method: "PUT",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        profilePicture:
+          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
+        user: { firstName: "John", lastName: "Appleseed" },
+        body: txt,
+      }),
+    };
+
+    $.ajax(settings).done(function (response) {
+      //console.log(response);
+      $(e).parent().parent().parent().next().prepend(`
   <div class="replyOnComment">
   <div class="replyOnCommentProfileFrame">
     <img
@@ -661,7 +672,7 @@ function replyOnComment(e) {
         ><span class="tDowntooltiptext">Dislike</span>
       </div>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div style="cursor: pointer;" class="replyReplyComment" onclick="reply(this)">
+      <div style="cursor: pointer;" class="replyReplyComment" onclick="replyToComment(this)">
         REPLY
       </div>
     </div>
@@ -695,23 +706,84 @@ function replyOnComment(e) {
 </div>
   `);
 
+      $(e).parent().prev().prev().val("");
+      $(e).parent().prev().prev().css("height", "2rem");
+      $(e).parent().parent().parent().css("display", "none");
+    });
+
     // if ($(".replyCommentBox").height() < 134.391) {
     //   $(".repReadMore").css("display", "none");
     // } else {
     //   $(".replyCommentBox").css("height", "6em");
     // }
-
-    $(e).parent().prev().prev().val("");
-    $(e).parent().prev().prev().css("height", "2rem");
-    $(e).parent().parent().parent().css("display", "none");
   }
 }
 
 function newReplyComment(e) {
   var txt = $(e).parent().prev().prev().val();
+  txt = txt.replace(/(\r\n|\n)/g, "<br />");
+  var name = $(e)
+    .parent()
+    .parent()
+    .parent()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .children(":first")
+    .children(":first")
+    .html();
+  var videoID = $(e)
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .attr("id");
+  var createSort = $(e)
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .parent()
+    .prev()
+    .prev()
+    .prev()
+    .prev()
+    .attr("id");
+  var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${videoID}/timeStamp/${createSort}`;
+
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
-    $(e).parent().parent().parent().parent().parent().parent().prepend(`
+    var settings = {
+      url: url,
+      method: "PUT",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        profilePicture:
+          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
+        user: { firstName: "Test", lastName: "User" },
+        body:
+          "<span style='color:#909090'>" + "@" + name + "</span>" + " " + txt,
+      }),
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+      $(e).parent().parent().parent().parent().parent().parent().prepend(`
     <div class="replyOnComment">
   <div class="replyOnCommentProfileFrame">
     <img
@@ -735,12 +807,12 @@ function newReplyComment(e) {
     ${
       brInStr(txt) > 3
         ? `
-      <div class="replyCommentBox" style="height: 6em;">${txt}</div>
+      <div class="replyCommentBox" style="height: 6em;"><span style='color:#909090'>@${name}</span> ${txt}</div>
       <div class="repReadMore" onclick="readMore(this)">Read more</div>
       <div class="repReadLess" onclick="readLess(this)">Show less</div>
       `
         : `
-        <div class="replyCommentBox">${txt}</div>
+        <div class="replyCommentBox"><span style='color:#909090'>@${name}</span> ${txt}</div>
         <div class="repReadMore" style="display: none;" onclick="readMore(this)">Read more</div>
         <div class="repReadLess" onclick="readLess(this)">Show less</div>
         `
@@ -772,11 +844,12 @@ function newReplyComment(e) {
       <div
         style="cursor: pointer;"
         class="replyReplyComment"
-        onclick="reply(this)"
+        onclick="replyToComment(this)"
       >
         REPLY
       </div>
     </div>
+    <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -807,15 +880,17 @@ function newReplyComment(e) {
 </div>
 
     `);
+      $(e).parent().prev().prev().val("");
+      $(e).parent().prev().prev().css("height", "2rem");
+      $(e).parent().parent().parent().css("display", "none");
+      $(e).parent().parent().parent().prev().html("");
+    });
+
     // if ($(".replyCommentBox").height() < 134.391) {
     //   $(".repReadMore").css("display", "none");
     // } else {
     //   $(".replyCommentBox").css("height", "6em");
     // }
-
-    $(e).parent().prev().prev().val("");
-    $(e).parent().prev().prev().css("height", "2rem");
-    $(e).parent().parent().parent().css("display", "none");
   }
 }
 
@@ -851,53 +926,93 @@ function readLess(e) {
   $(e).prev().css("display", "inline");
 }
 
-// DONE
 function reply(e) {
   $(e).parent().next().css("display", "flex");
   $(e).parent().next().children().eq(1).children().eq(0)[0].focus();
-  if (
-    $(e)
-      .parent()
-      .next()
-      .children()
-      .eq(1)
-      .children()
-      .eq(2)
-      .children()
-      .eq(1)[0]
-      .innerHTML.includes("COMMENT")
-  ) {
-    $(e)
-      .parent()
-      .next()
-      .children()
-      .eq(1)
-      .children()
-      .eq(0)
-      .val(
-        `@${
-          $(e)
-            .parent()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .children()
-            .eq(0)
-            .children()
-            .eq(0)[0].innerHTML
-        } `
-      );
-  }
 }
 
 // DONE
+function replyToComment(e) {
+  $(e).parent().next().next().css("display", "flex");
+  $(e).parent().next().next().children().eq(1).children().eq(0)[0].focus();
+  $(e)
+    .parent()
+    .next()
+    .html(
+      `Replying to @${
+        $(e)
+          .parent()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .children()
+          .eq(0)
+          .children()
+          .eq(0)[0].innerHTML
+      } `
+    );
+}
+
+// // DONE May not need (replyToComment function)
+// function replyToComment(e) {
+//   $(e).parent().next().next().css("display", "flex");
+//   $(e).parent().next().next().children().eq(1).children().eq(0)[0].focus();
+//   if (
+//     $(e)
+//       .parent()
+//       .next()
+//       .next()
+//       .children()
+//       .eq(1)
+//       .children()
+//       .eq(2)
+//       .children()
+//       .eq(1)[0]
+//       .innerHTML.includes("COMMENT")
+//   ) {
+//     $(e)
+//       .parent()
+//       .next()
+//       .next()
+//       .children()
+//       .eq(1)
+//       .children()
+//       .eq(0)
+//       .val(
+//         `@${
+//           $(e)
+//             .parent()
+//             .prev()
+//             .prev()
+//             .prev()
+//             .prev()
+//             .prev()
+//             .prev()
+//             .children()
+//             .eq(0)
+//             .children()
+//             .eq(0)[0].innerHTML
+//         } `
+//       );
+//   }
+// }
+
+// DONE
+
 function replyCancel(e) {
   $(e).parent().parent().parent().css("display", "none");
   // $(e).parent().prev().prev().val("");
   $(e).parent().prev().prev().css("height", "2em");
+}
+
+function replyCancelWithComment(e) {
+  $(e).parent().parent().parent().css("display", "none");
+  // $(e).parent().prev().prev().val("");
+  $(e).parent().prev().prev().css("height", "2em");
+  $(e).parent().parent().parent().prev().html("");
 }
 
 // DONE
@@ -958,9 +1073,18 @@ function tDown(e) {
         //console.log(response);
         $(e).css("color", "rgb(8, 96, 212)");
         if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
-          $(e).prev().prev().css("color", "rgb(144, 144, 144)");
-          var num = $(e).prev()[0].innerHTML;
-          $(e).prev()[0].innerHTML = Number(num) - 1;
+          var settings = {
+            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLike/${videoID}/timeStamp/${createSort}`,
+            method: "PUT",
+            timeout: 0,
+          };
+
+          $.ajax(settings).done(function (response) {
+            //console.log(response);
+            $(e).prev().prev().css("color", "rgb(144, 144, 144)");
+            var num = $(e).prev()[0].innerHTML;
+            $(e).prev()[0].innerHTML = Number(num) - 1;
+          });
         }
       });
       break;
@@ -975,6 +1099,43 @@ function tDown(e) {
         //console.log(response);
         $(e).css("color", "rgb(144, 144, 144)");
       });
+      break;
+  }
+}
+
+// DONE
+function tUpMock(e) {
+  var color = $(e).css("color");
+  switch (color) {
+    case "rgb(144, 144, 144)":
+      $(e).css("color", "rgb(8, 96, 212)");
+      var num = $(e).next()[0].innerHTML;
+      $(e).next()[0].innerHTML = Number(num) + 1;
+      $(e).next().next().css("color", "rgb(144, 144, 144)");
+      break;
+    case "rgb(8, 96, 212)":
+      $(e).css("color", "rgb(144, 144, 144)");
+      var num = $(e).next()[0].innerHTML;
+      $(e).next()[0].innerHTML = Number(num) - 1;
+      $(e).next().next().css("color", "rgb(144, 144, 144)");
+      break;
+  }
+}
+
+// DONE
+function tDownMock(e) {
+  var color = $(e).css("color");
+  switch (color) {
+    case "rgb(144, 144, 144)":
+      $(e).css("color", "rgb(8, 96, 212)");
+      if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
+        $(e).prev().prev().css("color", "rgb(144, 144, 144)");
+        var num = $(e).prev()[0].innerHTML;
+        $(e).prev()[0].innerHTML = Number(num) - 1;
+      }
+      break;
+    case "rgb(8, 96, 212)":
+      $(e).css("color", "rgb(144, 144, 144)");
       break;
   }
 }
