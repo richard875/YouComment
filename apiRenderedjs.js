@@ -158,8 +158,7 @@ function fetchData() {
     .then((data) => {
       //console.log(data);
       newId = Object.keys(data).length;
-      comm = newId > 1 ? " Comments" : " Comment";
-      $("#commentNumber").html(newId + comm);
+      $("#commentNumber").html(newId + (newId > 1 ? " Comments" : " Comment"));
       var rendered = data.map((comment) => {
         singleComment = `
           <!-- Each comments -->
@@ -260,12 +259,9 @@ function fetchData() {
                   </div>
                 </div>
               </div>
-
               <div id="${comment.videoID}"></div>
               <div id="${comment.creatSort}"></div>
-          
               <div id="newComments"></div>
-
         `;
 
         if (!(comment.replies === undefined || comment.replies.length == 0)) {
@@ -417,15 +413,13 @@ function fetchData() {
         return singleComment;
       });
       $(`#commentSection`).prepend(rendered);
+    })
+    .catch(function (error) {
+      console.log(JSON.stringify(error));
     });
-
-  // .catch(function (error) {
-  //   console.log(JSON.stringify(error));
-  // });
 }
 fetchData();
 
-// DONE
 function getLength() {
   return new Promise((resolve) => {
     //setTimeout(() => {
@@ -441,22 +435,19 @@ function getLength() {
   });
 }
 
-// DONE
 function textAreaFocus() {
   $("#commentButtonBox").css("display", "flex");
   $("#commentInput").css("height", "2rem");
 }
 
-// DONE
 $("#cancelButton").click(function () {
   $("#commentButtonBox").css("display", "none");
   $("#commentInput").css("height", "2rem");
   $("#commentInput").val("");
 });
 
-$("#commentButton").click(async function () {
+$("#commentButton").click(function () {
   var txt = $("#commentInput").val();
-  txt = txt.replace(/(\r\n|\n)/g, "<br />");
   //var newId = await getLength();
   var newId = 100;
 
@@ -464,6 +455,7 @@ $("#commentButton").click(async function () {
     "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/createVideo";
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
+    txt = txt.replace(/(\r\n|\n)/g, "<br />");
     var settings = {
       url: url,
       method: "POST",
@@ -482,7 +474,6 @@ $("#commentButton").click(async function () {
 
     $.ajax(settings).done(function (response) {
       //console.log(response);
-
       $("#commentSection").prepend(`
     <!-- Each comments -->
       <div class="comments">
@@ -513,65 +504,8 @@ $("#commentButton").click(async function () {
             newId + 1
           }" onclick="readMore(this)">Read more</div>
           <div class="comReadLess" onclick="readLess(this)">Show less</div>
-          <!-- White space -->
-          <div style="width: 100%; height: 1rem;"></div>
-          <div class="likeDislikeComment">
-            <div class="tUp" onclick="tUp(this)" style="color: #909090;">
-              <i
-                class="fa fa-thumbs-up"
-                style="font-size: 1.3rem;"
-                aria-hidden="true"
-              ></i>
-              <span class="tUptooltiptext">Like</span>
-            </div>
-            &nbsp;&nbsp;&nbsp;
-            <div class="tUpCount">0</div>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="tDown" onclick="tDown(this)" style="color: #909090;">
-              <i
-                class="fa fa-thumbs-down"
-                style="font-size: 1.3rem; transform: scale(-1, 1);"
-                aria-hidden="true"
-              ></i
-              ><span class="tDowntooltiptext">Dislike</span>
-            </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
-          </div>
-          <!-- 1 -->
-          <div class="replyAddComment">
-            <div class="userProfileFrame">
-              <img
-                class="userProfilePicFrame"
-                style="margin-top: 0.6rem;"
-                src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
-              />
-            </div>
-            <div class="addCommentRight">
-              <textarea
-                placeholder="Add a public reply..."
-                class="commentInput"
-                onfocus="textExpand(this)"
-              ></textarea>
-              <div class="runderline"></div>
-              <div id="replyCommentButtonBox">
-                <div class="replyCancelButton" onclick="replyCancel(this)">
-                  CANCEL
-                </div>
-                <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
-                  REPLY
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="videoID"></div>
-          <div id="createSort"></div>
-
-          <div id="newComments"></div>
           </div>
         </div>
-      </div>
     `);
 
       if ($(`#userCommentBox${newId + 1}`).height() < 134.391) {
@@ -591,12 +525,12 @@ $("#commentButton").click(async function () {
 
 function replyOnComment(e) {
   var txt = $(e).parent().prev().prev().val();
-  txt = txt.replace(/(\r\n|\n)/g, "<br />");
   var video = $(e).parent().parent().parent().next().attr("id");
   var createSort = $(e).parent().parent().parent().next().next().attr("id");
   var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${video}/timeStamp/${createSort}`;
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
+    txt = txt.replace(/(\r\n|\n)/g, "<br />");
     var settings = {
       url: url,
       method: "PUT",
@@ -614,7 +548,16 @@ function replyOnComment(e) {
 
     $.ajax(settings).done(function (response) {
       //console.log(response);
-      $(e).parent().parent().parent().next().prepend(`
+      $(e)
+        .parent()
+        .parent()
+        .parent()
+        .next()
+        .next()
+        .next()
+        .next()
+        .next()
+        .next().prepend(`
   <div class="replyOnComment">
   <div class="replyOnCommentProfileFrame">
     <img
@@ -652,7 +595,7 @@ function replyOnComment(e) {
     <!-- White space -->
     <div style="width: 100%; height: 1rem;"></div>
     <div class="likeDislikeComment">
-      <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+      <div class="tUp" onclick="tUpMock(this)" style="color: #909090;">
         <i
           class="fa fa-thumbs-up"
           style="font-size: 1.3rem;"
@@ -660,10 +603,10 @@ function replyOnComment(e) {
         ></i>
         <span class="tUptooltiptext">Like</span>
       </div>
-      &nbsp;&nbsp;&nbsp;
-      <div class="tUpCount">0</div>
+      <!-- &nbsp;&nbsp;&nbsp; -->
+      <div class="tUpCount" style="display: none;">0</div>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+      <div class="tDown" onclick="tDownMock(this)" style="color: #909090;">
         <i
           class="fa fa-thumbs-down"
           style="font-size: 1.3rem; transform: scale(-1, 1);"
@@ -676,6 +619,7 @@ function replyOnComment(e) {
         REPLY
       </div>
     </div>
+    <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -693,7 +637,7 @@ function replyOnComment(e) {
         ></textarea>
         <div class="runderline"></div>
         <div id="replyReplyButtonBox">
-          <div class="replyReplyCancelButton" onclick="replyCancel(this)">
+          <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
             CANCEL
           </div>
           <div id="commentButton" onclick="newReplyComment(this)">
@@ -709,6 +653,7 @@ function replyOnComment(e) {
       $(e).parent().prev().prev().val("");
       $(e).parent().prev().prev().css("height", "2rem");
       $(e).parent().parent().parent().css("display", "none");
+      showReplies($(e).parent().parent().parent().next().next().next().next());
     });
 
     // if ($(".replyCommentBox").height() < 134.391) {
@@ -721,7 +666,6 @@ function replyOnComment(e) {
 
 function newReplyComment(e) {
   var txt = $(e).parent().prev().prev().val();
-  txt = txt.replace(/(\r\n|\n)/g, "<br />");
   var name = $(e)
     .parent()
     .parent()
@@ -765,6 +709,7 @@ function newReplyComment(e) {
   var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${videoID}/timeStamp/${createSort}`;
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
+    txt = txt.replace(/(\r\n|\n)/g, "<br />");
     var settings = {
       url: url,
       method: "PUT",
@@ -782,7 +727,7 @@ function newReplyComment(e) {
     };
 
     $.ajax(settings).done(function (response) {
-      console.log(response);
+      //console.log(response);
       $(e).parent().parent().parent().parent().parent().parent().prepend(`
     <div class="replyOnComment">
   <div class="replyOnCommentProfileFrame">
@@ -821,7 +766,7 @@ function newReplyComment(e) {
     <!-- White space -->
     <div style="width: 100%; height: 1rem;"></div>
     <div class="likeDislikeComment">
-      <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+      <div class="tUp" onclick="tUpMock(this)" style="color: #909090;">
         <i
           class="fa fa-thumbs-up"
           style="font-size: 1.3rem;"
@@ -829,10 +774,10 @@ function newReplyComment(e) {
         ></i>
         <span class="tUptooltiptext">Like</span>
       </div>
-      &nbsp;&nbsp;&nbsp;
-      <div class="tUpCount">0</div>
+      <!-- &nbsp;&nbsp;&nbsp; -->
+      <div class="tUpCount" style="display: none">0</div>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+      <div class="tDown" onclick="tDownMock(this)" style="color: #909090;">
         <i
           class="fa fa-thumbs-down"
           style="font-size: 1.3rem; transform: scale(-1, 1);"
@@ -867,7 +812,7 @@ function newReplyComment(e) {
         ></textarea>
         <div class="runderline"></div>
         <div id="replyReplyButtonBox">
-          <div class="replyReplyCancelButton" onclick="replyCancel(this)">
+          <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
             CANCEL
           </div>
           <div id="commentButton" onclick="newReplyComment(this)">
@@ -885,7 +830,6 @@ function newReplyComment(e) {
       $(e).parent().parent().parent().css("display", "none");
       $(e).parent().parent().parent().prev().html("");
     });
-
     // if ($(".replyCommentBox").height() < 134.391) {
     //   $(".repReadMore").css("display", "none");
     // } else {
@@ -894,21 +838,18 @@ function newReplyComment(e) {
   }
 }
 
-// DONE
 function showReplies(e) {
   $(e).next().next().css("display", "flex");
   $(e).css("display", "none");
   $(e).next().css("display", "flex");
 }
 
-// DONE
 function hideReplies(e) {
   $(e).next().css("display", "none");
   $(e).css("display", "none");
   $(e).prev().css("display", "flex");
 }
 
-// DONE
 function readMore(e) {
   var reducedHeight = $(e).prev().height();
   $(e).prev().css("height", "auto");
@@ -919,7 +860,6 @@ function readMore(e) {
   $(e).next().css("display", "inline");
 }
 
-// DONE
 function readLess(e) {
   $(e).prev().prev().css("height", "6em");
   $(e).css("display", "none");
@@ -931,7 +871,6 @@ function reply(e) {
   $(e).parent().next().children().eq(1).children().eq(0)[0].focus();
 }
 
-// DONE
 function replyToComment(e) {
   $(e).parent().next().next().css("display", "flex");
   $(e).parent().next().next().children().eq(1).children().eq(0)[0].focus();
@@ -939,7 +878,7 @@ function replyToComment(e) {
     .parent()
     .next()
     .html(
-      `Replying to @${
+      `Replying to ${
         $(e)
           .parent()
           .prev()
@@ -956,66 +895,17 @@ function replyToComment(e) {
     );
 }
 
-// // DONE May not need (replyToComment function)
-// function replyToComment(e) {
-//   $(e).parent().next().next().css("display", "flex");
-//   $(e).parent().next().next().children().eq(1).children().eq(0)[0].focus();
-//   if (
-//     $(e)
-//       .parent()
-//       .next()
-//       .next()
-//       .children()
-//       .eq(1)
-//       .children()
-//       .eq(2)
-//       .children()
-//       .eq(1)[0]
-//       .innerHTML.includes("COMMENT")
-//   ) {
-//     $(e)
-//       .parent()
-//       .next()
-//       .next()
-//       .children()
-//       .eq(1)
-//       .children()
-//       .eq(0)
-//       .val(
-//         `@${
-//           $(e)
-//             .parent()
-//             .prev()
-//             .prev()
-//             .prev()
-//             .prev()
-//             .prev()
-//             .prev()
-//             .children()
-//             .eq(0)
-//             .children()
-//             .eq(0)[0].innerHTML
-//         } `
-//       );
-//   }
-// }
-
-// DONE
-
 function replyCancel(e) {
   $(e).parent().parent().parent().css("display", "none");
-  // $(e).parent().prev().prev().val("");
   $(e).parent().prev().prev().css("height", "2em");
 }
 
 function replyCancelWithComment(e) {
   $(e).parent().parent().parent().css("display", "none");
-  // $(e).parent().prev().prev().val("");
   $(e).parent().prev().prev().css("height", "2em");
   $(e).parent().parent().parent().prev().html("");
 }
 
-// DONE
 function tUp(e) {
   var color = $(e).css("color");
   var videoID = $(e).parent().next().next().attr("id");
@@ -1034,7 +924,18 @@ function tUp(e) {
         $(e).css("color", "rgb(8, 96, 212)");
         var num = $(e).next()[0].innerHTML;
         $(e).next()[0].innerHTML = Number(num) + 1;
-        $(e).next().next().css("color", "rgb(144, 144, 144)");
+
+        if ($(e).next().next().css("color") == "rgb(8, 96, 212)") {
+          var settings = {
+            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLike/${videoID}/timeStamp/${createSort}`,
+            method: "PUT",
+            timeout: 0,
+          };
+          $.ajax(settings).done(function (response) {
+            //console.log(response);
+            $(e).next().next().css("color", "rgb(144, 144, 144)");
+          });
+        }
       });
       break;
     case "rgb(8, 96, 212)":
@@ -1055,7 +956,6 @@ function tUp(e) {
   }
 }
 
-// DONE
 function tDown(e) {
   var color = $(e).css("color");
   var videoID = $(e).parent().next().next().attr("id");
@@ -1103,7 +1003,6 @@ function tDown(e) {
   }
 }
 
-// DONE
 function tUpMock(e) {
   var color = $(e).css("color");
   switch (color) {
@@ -1122,7 +1021,6 @@ function tUpMock(e) {
   }
 }
 
-// DONE
 function tDownMock(e) {
   var color = $(e).css("color");
   switch (color) {
