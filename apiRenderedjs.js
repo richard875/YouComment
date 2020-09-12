@@ -259,6 +259,10 @@ function fetchData() {
                   </div>
                 </div>
               </div>
+
+              <div id="${comment.videoID}"></div>
+              <div id="${comment.creatSort}"></div>
+          
               <div id="newComments"></div>
 
         `;
@@ -417,9 +421,9 @@ function fetchData() {
   //   console.log(JSON.stringify(error));
   // });
 }
-
 fetchData();
 
+// DONE
 function getLength() {
   return new Promise((resolve) => {
     //setTimeout(() => {
@@ -435,11 +439,13 @@ function getLength() {
   });
 }
 
+// DONE
 function textAreaFocus() {
   $("#commentButtonBox").css("display", "flex");
   $("#commentInput").css("height", "2rem");
 }
 
+// DONE
 $("#cancelButton").click(function () {
   $("#commentButtonBox").css("display", "none");
   $("#commentInput").css("height", "2rem");
@@ -448,42 +454,137 @@ $("#cancelButton").click(function () {
 
 $("#commentButton").click(async function () {
   var txt = $("#commentInput").val();
+  txt = txt.replace(/(\r\n|\n)/g, "<br />");
   //var newId = await getLength();
   var newId = 100;
 
-  var settings = {
-    url:
-      "https://stark-plains-79911.herokuapp.com/https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/createVideo",
-    method: "POST",
-    timeout: 0,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: JSON.stringify({
-      videoID: "abc123",
-      profilePicture:
-        "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
-      user: { firstName: "Sam", lastName: "Jones" },
-      body:
-        "Now <br />I can say:<br />Sussessful!!!<br />Sussessful!!!<br />Sussessful!!!<br />Sussessful!!!",
-    }),
-  };
+  var url =
+    "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/createVideo";
 
-  $.ajax(settings).done(function (response) {
-    console.log(response);
-  });
+  if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
+    var settings = {
+      url: url,
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        videoID: "abc123",
+        profilePicture:
+          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
+        user: { firstName: "Sam", lastName: "Jones" },
+        body: txt,
+      }),
+    };
 
-  // const proxy = "https://stark-plains-79911.herokuapp.com/";
-  // const url =
-  //   "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/post";
+    $.ajax(settings).done(function (response) {
+      //console.log(response);
 
-  // const toPost = {
-  //   videoID: "abc123",
-  //   profilePicture:
-  //     "https://e0.365dm.com/20/07/768x432/skysports-lewis-hamilton-f1_5043765.jpg?20200719142248",
-  //   user: { firstName: "Lewis", lastName: "Hamilton" },
-  //   body: "123",
-  // };
+      $("#commentSection").prepend(`
+    <!-- Each comments -->
+      <div class="comments">
+        <div class="commentProfileFrame">
+          <img
+            class="userProfilePicFrame"
+            style="margin-top: 1rem;"
+            src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+          />
+        </div>
+        <div class="commentRight">
+          <div class="nameAndTime">
+            <div style="letter-spacing: 0.03rem;">
+              <b>Richard Lee</b>
+            </div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div style="color: #909090;">
+              ${timeSince(Date.now())} ago
+            </div>
+          </div>
+          <!-- White space -->
+          <div style="width: 100%; height: 1rem;"></div>
+          <div class="userCommentBox" id="userCommentBox${newId + 1}">
+            ${txt}
+            <br/>
+          </div>
+          <div class="comReadMore" id="comReadMore${
+            newId + 1
+          }" onclick="readMore(this)">Read more</div>
+          <div class="comReadLess" onclick="readLess(this)">Show less</div>
+          <!-- White space -->
+          <div style="width: 100%; height: 1rem;"></div>
+          <div class="likeDislikeComment">
+            <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+              <i
+                class="fa fa-thumbs-up"
+                style="font-size: 1.3rem;"
+                aria-hidden="true"
+              ></i>
+              <span class="tUptooltiptext">Like</span>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <div class="tUpCount">0</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+              <i
+                class="fa fa-thumbs-down"
+                style="font-size: 1.3rem; transform: scale(-1, 1);"
+                aria-hidden="true"
+              ></i
+              ><span class="tDowntooltiptext">Dislike</span>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
+          </div>
+          <!-- 1 -->
+          <div class="replyAddComment">
+            <div class="userProfileFrame">
+              <img
+                class="userProfilePicFrame"
+                style="margin-top: 0.6rem;"
+                src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+              />
+            </div>
+            <div class="addCommentRight">
+              <textarea
+                placeholder="Add a public reply..."
+                class="commentInput"
+                onfocus="textExpand(this)"
+              ></textarea>
+              <div class="runderline"></div>
+              <div id="replyCommentButtonBox">
+                <div class="replyCancelButton" onclick="replyCancel(this)">
+                  CANCEL
+                </div>
+                <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
+                  REPLY
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="videoID"></div>
+          <div id="createSort"></div>
+
+          <div id="newComments"></div>
+          </div>
+        </div>
+      </div>
+    `);
+
+      if ($(`#userCommentBox${newId + 1}`).height() < 134.391) {
+        $(`#comReadMore${newId + 1}`).css("display", "none");
+      } else {
+        $(`#userCommentBox${newId + 1}`).css("height", "6em");
+      }
+
+      $("#commentInput").val("");
+      $("#commentInput").css("height", "2rem");
+      $("#commentButtonBox").css("display", "none");
+
+      //newId++;
+    });
+  }
 
   // $.ajax({
   //   type: "POST",
@@ -496,108 +597,6 @@ $("#commentButton").click(async function () {
   //     alert("Data: " + data + "\nStatus: " + status);
   //   },
   // });
-
-  if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
-    $("#commentSection").prepend(`
-  <!-- Each comments -->
-    <div class="comments">
-      <div class="commentProfileFrame">
-        <img
-          class="userProfilePicFrame"
-          style="margin-top: 1rem;"
-          src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
-        />
-      </div>
-      <div class="commentRight">
-        <div class="nameAndTime">
-          <div style="letter-spacing: 0.03rem;">
-            <b>Richard Lee</b>
-          </div>
-          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-          <div style="color: #909090;">
-            ${timeSince(Date.now())} ago
-          </div>
-        </div>
-        <!-- White space -->
-        <div style="width: 100%; height: 1rem;"></div>
-        <div class="userCommentBox" id="userCommentBox${newId + 1}">
-          ${txt}
-          <br/>
-        </div>
-        <div class="comReadMore" id="comReadMore${
-          newId + 1
-        }" onclick="readMore(this)">Read more</div>
-        <div class="comReadLess" onclick="readLess(this)">Show less</div>
-        <!-- White space -->
-        <div style="width: 100%; height: 1rem;"></div>
-        <div class="likeDislikeComment">
-          <div class="tUp" onclick="tUp(this)" style="color: #909090;">
-            <i
-              class="fa fa-thumbs-up"
-              style="font-size: 1.3rem;"
-              aria-hidden="true"
-            ></i>
-            <span class="tUptooltiptext">Like</span>
-          </div>
-          &nbsp;&nbsp;&nbsp;
-          <div class="tUpCount">0</div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div class="tDown" onclick="tDown(this)" style="color: #909090;">
-            <i
-              class="fa fa-thumbs-down"
-              style="font-size: 1.3rem; transform: scale(-1, 1);"
-              aria-hidden="true"
-            ></i
-            ><span class="tDowntooltiptext">Dislike</span>
-          </div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
-        </div>
-        <!-- 1 -->
-        <div class="replyAddComment">
-          <div class="userProfileFrame">
-            <img
-              class="userProfilePicFrame"
-              style="margin-top: 0.6rem;"
-              src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
-            />
-          </div>
-          <div class="addCommentRight">
-            <textarea
-              placeholder="Add a public reply..."
-              class="commentInput"
-              onfocus="textExpand(this)"
-            ></textarea>
-            <div class="runderline"></div>
-            <div id="replyCommentButtonBox">
-              <div class="replyCancelButton" onclick="replyCancel(this)">
-                CANCEL
-              </div>
-              <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
-                REPLY
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="newComments"></div>
-        </div>
-      </div>
-    </div>
-  `);
-
-    if ($(`#userCommentBox${newId + 1}`).height() < 134.391) {
-      $(`#comReadMore${newId + 1}`).css("display", "none");
-    } else {
-      $(`#userCommentBox${newId + 1}`).css("height", "6em");
-    }
-
-    $("#commentInput").val("");
-    $("#commentInput").css("height", "2rem");
-    $("#commentButtonBox").css("display", "none");
-
-    newId++;
-  }
 });
 
 function replyOnComment(e) {
@@ -820,18 +819,21 @@ function newReplyComment(e) {
   }
 }
 
+// DONE
 function showReplies(e) {
   $(e).next().next().css("display", "flex");
   $(e).css("display", "none");
   $(e).next().css("display", "flex");
 }
 
+// DONE
 function hideReplies(e) {
   $(e).next().css("display", "none");
   $(e).css("display", "none");
   $(e).prev().css("display", "flex");
 }
 
+// DONE
 function readMore(e) {
   var reducedHeight = $(e).prev().height();
   $(e).prev().css("height", "auto");
@@ -842,12 +844,14 @@ function readMore(e) {
   $(e).next().css("display", "inline");
 }
 
+// DONE
 function readLess(e) {
   $(e).prev().prev().css("height", "6em");
   $(e).css("display", "none");
   $(e).prev().css("display", "inline");
 }
 
+// DONE
 function reply(e) {
   $(e).parent().next().css("display", "flex");
   $(e).parent().next().children().eq(1).children().eq(0)[0].focus();
@@ -889,43 +893,88 @@ function reply(e) {
   }
 }
 
+// DONE
 function replyCancel(e) {
   $(e).parent().parent().parent().css("display", "none");
   // $(e).parent().prev().prev().val("");
   $(e).parent().prev().prev().css("height", "2em");
 }
 
+// DONE
 function tUp(e) {
   var color = $(e).css("color");
+  var videoID = $(e).parent().next().next().attr("id");
+  var createSort = $(e).parent().next().next().next().attr("id");
+
   switch (color) {
     case "rgb(144, 144, 144)":
-      $(e).css("color", "rgb(8, 96, 212)");
-      var num = $(e).next()[0].innerHTML;
-      $(e).next()[0].innerHTML = Number(num) + 1;
-      $(e).next().next().css("color", "rgb(144, 144, 144)");
+      var settings = {
+        url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/like/${videoID}/timeStamp/${createSort}`,
+        method: "PUT",
+        timeout: 0,
+      };
+
+      $.ajax(settings).done(function (response) {
+        //console.log(response);
+        $(e).css("color", "rgb(8, 96, 212)");
+        var num = $(e).next()[0].innerHTML;
+        $(e).next()[0].innerHTML = Number(num) + 1;
+        $(e).next().next().css("color", "rgb(144, 144, 144)");
+      });
       break;
     case "rgb(8, 96, 212)":
-      $(e).css("color", "rgb(144, 144, 144)");
-      var num = $(e).next()[0].innerHTML;
-      $(e).next()[0].innerHTML = Number(num) - 1;
-      $(e).next().next().css("color", "rgb(144, 144, 144)");
+      var settings = {
+        url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLike/${videoID}/timeStamp/${createSort}`,
+        method: "PUT",
+        timeout: 0,
+      };
+
+      $.ajax(settings).done(function (response) {
+        //console.log(response);
+        $(e).css("color", "rgb(144, 144, 144)");
+        var num = $(e).next()[0].innerHTML;
+        $(e).next()[0].innerHTML = Number(num) - 1;
+        $(e).next().next().css("color", "rgb(144, 144, 144)");
+      });
       break;
   }
 }
 
+// DONE
 function tDown(e) {
   var color = $(e).css("color");
+  var videoID = $(e).parent().next().next().attr("id");
+  var createSort = $(e).parent().next().next().next().attr("id");
+
   switch (color) {
     case "rgb(144, 144, 144)":
-      $(e).css("color", "rgb(8, 96, 212)");
-      if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
-        $(e).prev().prev().css("color", "rgb(144, 144, 144)");
-        var num = $(e).prev()[0].innerHTML;
-        $(e).prev()[0].innerHTML = Number(num) - 1;
-      }
+      var settings = {
+        url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/disLike/${videoID}/timeStamp/${createSort}`,
+        method: "PUT",
+        timeout: 0,
+      };
+
+      $.ajax(settings).done(function (response) {
+        //console.log(response);
+        $(e).css("color", "rgb(8, 96, 212)");
+        if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
+          $(e).prev().prev().css("color", "rgb(144, 144, 144)");
+          var num = $(e).prev()[0].innerHTML;
+          $(e).prev()[0].innerHTML = Number(num) - 1;
+        }
+      });
       break;
     case "rgb(8, 96, 212)":
-      $(e).css("color", "rgb(144, 144, 144)");
+      var settings = {
+        url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLike/${videoID}/timeStamp/${createSort}`,
+        method: "PUT",
+        timeout: 0,
+      };
+
+      $.ajax(settings).done(function (response) {
+        //console.log(response);
+        $(e).css("color", "rgb(144, 144, 144)");
+      });
       break;
   }
 }
