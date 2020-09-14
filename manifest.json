@@ -2,13 +2,9 @@
   "name": "Hello Extensions",
   "description": "Hello World!",
   "version": "1.0",
-
   "manifest_version": 2,
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
-  "page_action": {
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArk5tpZtQ1buPWemuppDs/Wfl+T3NxUWi7zSfVXaHYfOwixv8W6o6cWyyVxfeFxdEX8zMv1BPS+SCGGo9+GyOEAJE9kTptLjv3htmpIO6n9uHy2OASeUlg7DlKBVhU7fVF4GFG7A8X3Ix1XRU3nwLWlDEEaiojU7gDUhy4CKqyTNMJ8Hu1xsPzg0djeLb3DR6qaM3asjODiZDguZ2Cq5LxQvoPKrbJx7+Bj3PSiWoh8mifPVC13RIw4VZ3wwVyn68ajMsK+1R08bqZT5lxdbSUT7+QwgLN7y01rSsK+q7165G5oGR7jS4GSJCh2DBSEk0R8Scha5MQqDwkeUml3MMTQIDAQAB",
+  "browser_action": {
     "default_popup": "Index.html",
     "default_icon": {
       "16": "images/get_started16.png",
@@ -23,6 +19,10 @@
     "48": "images/get_started48.png",
     "128": "images/get_started128.png"
   },
+  "background": {
+    "scripts": ["./background.js", "jsrsasign-all-min.js"]
+  },
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js; object-src 'self'",
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*", "https://www.youtube.com/"],
@@ -31,6 +31,8 @@
     }
   ],
   "permissions": [
+    "identity",
+    "identity.email",
     "activeTab",
     "declarativeContent",
     "storage",

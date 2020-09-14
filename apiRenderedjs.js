@@ -150,6 +150,16 @@ var fakeDate = {
   ],
 };
 
+// This is the Video ID from toChange.js!!!!
+var vID = $("#exportContent").next().attr("id");
+var firstName = $("#exportContent").next().next().attr("id");
+var lastName = $("#exportContent").next().next().next().attr("id");
+var profilePicture = $("#exportContent").next().next().next().next().attr("id");
+console.log(vID);
+console.log(firstName);
+console.log(lastName);
+console.log(profilePicture);
+
 function fetchData() {
   const url =
     "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/abc123";
@@ -375,7 +385,7 @@ function fetchData() {
                 REPLY
               </div>
             </div>
-            <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
+            <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
             <!-- Write comment section -->
             <div class="replyAddReply">
               <div class="userProfileFrame">
@@ -619,7 +629,7 @@ function replyOnComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
+    <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -794,7 +804,7 @@ function newReplyComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 3vh; font-size: 2vh"></div>
+    <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -891,7 +901,7 @@ function replyToComment(e) {
           .eq(0)
           .children()
           .eq(0)[0].innerHTML
-      } `
+      }:`
     );
 }
 
