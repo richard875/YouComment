@@ -43,8 +43,7 @@ var checkExist = setInterval(async function () {
     $("ytd-comments").replaceWith(
       `
       <!-- Copy This -->
-      <!-- <link rel="stylesheet" href="styles.css" /> -->
-      <link rel="stylesheet" href="http://127.0.0.1:5500/styles.css" />
+      <link rel="stylesheet" href="./styles.css" />
       <link
         rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
@@ -99,7 +98,7 @@ var checkExist = setInterval(async function () {
     
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <!-- <script src="apiRenderedjs.js"></script> -->
+      <!-- <script src="./apiRenderedjs.js"></script> -->
       <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
       `
     );

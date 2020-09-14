@@ -1,5 +1,5 @@
 {
-  "name": "Hello Extensions",
+  "name": "YouComment",
   "description": "Hello World!",
   "version": "1.0",
   "manifest_version": 2,
@@ -7,22 +7,22 @@
   "browser_action": {
     "default_popup": "Index.html",
     "default_icon": {
-      "16": "images/get_started16.png",
-      "32": "images/get_started32.png",
-      "48": "images/get_started48.png",
-      "128": "images/get_started128.png"
+      "16": "src/YouComment.png",
+      "32": "src/YouComment.png",
+      "48": "src/YouComment.png",
+      "128": "src/YouComment.png"
     }
   },
   "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
+    "16": "src/YouComment.png",
+    "32": "src/YouComment.png",
+    "48": "src/YouComment.png",
+    "128": "src/YouComment.png"
   },
   "background": {
     "scripts": ["./background.js", "jsrsasign-all-min.js"]
   },
-  "content_security_policy": "script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js; object-src 'self'",
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*", "https://www.youtube.com/"],

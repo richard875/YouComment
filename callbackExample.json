@@ -1,17 +1,37 @@
-{
-  "aud": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
-  "azp": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
-  "email": "richardarmstrong098@gmail.com",
-  "email_verified": true,
-  "exp": 1600047876,
-  "family_name": "Armstrong",
-  "given_name": "Richard",
-  "iat": 1600044276,
-  "iss": "https://accounts.google.com",
-  "jti": "4f700e78e16228b6e610e5450237141eb149dc4e",
-  "locale": "en-GB",
-  "name": "Richard Armstrong",
-  "nonce": "kjdtxta8gfso7oz07mdso",
-  "picture": "https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s96-c",
-  "sub": "109660598899337860184"
-}
+[
+  {
+    "aud": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
+    "azp": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
+    "email": "richardarmstrong098@gmail.com",
+    "email_verified": true,
+    "exp": 1600047876,
+    "family_name": "Armstrong",
+    "given_name": "Richard",
+    "iat": 1600044276,
+    "iss": "https://accounts.google.com",
+    "jti": "4f700e78e16228b6e610e5450237141eb149dc4e",
+    "locale": "en-GB",
+    "name": "Richard Armstrong",
+    "nonce": "kjdtxta8gfso7oz07mdso",
+    "picture": "https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s96-c",
+    "sub": "109660598899337860184"
+  },
+  {
+    "aud": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
+    "azp": "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com",
+    "email": "rli315@aucklanduni.ac.nz",
+    "email_verified": true,
+    "exp": 1600066391,
+    "family_name": "Lee",
+    "given_name": "Richard",
+    "hd": "aucklanduni.ac.nz",
+    "iat": 1600062791,
+    "iss": "https://accounts.google.com",
+    "jti": "e2979c6f25877447490a8e3fc5b457c5b5e3386e",
+    "locale": "en-GB",
+    "name": "Richard Lee",
+    "nonce": "ujxal0ld2algoby733mcu",
+    "picture": "https://lh3.googleusercontent.com/a-/AOh14GgQXgliDtLDRgyhdHE-aqIjQgJlhrsWqltsvdzZ=s96-c",
+    "sub": "111752687746431574984"
+  }
+]

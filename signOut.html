@@ -1,23 +1,107 @@
 <html>
   <head>
-    <title>FriendBlock</title>
+    <title>Sign Out</title>
     <style>
-      button {
-        padding: 10px;
-        background-color: #3c79f8;
-        display: inline-block;
+      html,
+      body {
+        width: 330px;
+        height: 530px;
+      }
+      @font-face {
+        font-family: YouFont;
+        src: url("src/YouFont.otf");
+      }
+      .mainImage {
+        margin-top: 30px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 80px;
+        width: 80px;
+      }
+      .welcome {
+        margin-top: 50px;
+        font-family: "YouFont";
+        font-size: 25px;
+        text-align: center;
+      }
+      .donateSmallText {
+        margin-top: 80px;
+        font-family: "YouFont";
+        font-size: 19px;
+        text-align: center;
+      }
+      .donateButton {
+        margin-top: 20px;
+        height: 40px;
+        width: 80%;
+        border-radius: 20vw;
+        background-color: #f2c477;
+        color: #212121;
+        font-family: "YouFont";
+        font-size: 5vw;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        transition: 0.3s;
+        -webkit-box-shadow: 9px 6px 73px -13px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 9px 6px 73px -13px rgba(0, 0, 0, 0.75);
+        box-shadow: 9px 6px 73px -13px rgba(0, 0, 0, 0.75);
+      }
+      .donateButton:hover {
+        background-color: #cca054;
+      }
+      .donateButton p {
+        margin: 0;
+        position: relative;
+        top: 57%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     </style>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-    <meta
-      name="google-signin-client_id"
-      content="654630289150-itoqmccd21u4pu2tvl010iudjf5h0boe.apps.googleusercontent.com"
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"
     />
   </head>
   <body>
-    <button>Sign Out</button>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    <div id="friendDiv"></div>
+    <img src="src/YouComment.png" class="mainImage" />
+    <p class="welcome">Thank you for your support</p>
+    <p class="welcome" style="margin-top: -10px">Happy Commenting!</p>
+    <div
+      class="col s12 m6 offset-m3 center-align"
+      style="margin-top: 20px"
+      id="signOut"
+    >
+      <div
+        class="oauth-container btn darken-4 white black-text"
+        style="text-transform: none"
+      >
+        <div class="left">
+          <img
+            width="20px"
+            style="margin-top: 7px; margin-right: 8px"
+            alt="Google sign-in"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+          />
+        </div>
+        Sign out
+      </div>
+    </div>
+    <p class="donateSmallText">
+      You donation will keep our server running, thus keeping this software
+      running!
+    </p>
+    <a href="./donate.html" target="_blank">
+      <div class="donateButton">
+        <p>Donate</p>
+      </div>
+    </a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+    <script type="text/javascript" src="signOut.js"></script>
   </body>
 </html>

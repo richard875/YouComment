@@ -385,7 +385,7 @@ function fetchData() {
                 REPLY
               </div>
             </div>
-            <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
+            <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
             <!-- Write comment section -->
             <div class="replyAddReply">
               <div class="userProfileFrame">
@@ -629,7 +629,7 @@ function replyOnComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
+    <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -804,7 +804,7 @@ function newReplyComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 0vh; font-size: 1.5vh"></div>
+    <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
@@ -901,7 +901,7 @@ function replyToComment(e) {
           .eq(0)
           .children()
           .eq(0)[0].innerHTML
-      }:`
+      }`
     );
 }
 
