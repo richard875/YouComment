@@ -102,6 +102,10 @@ function brInStr(str) {
   return lines.length;
 }
 
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // Dummy Data
 var fakeDate = {
   totalResults: 2,
@@ -155,10 +159,31 @@ var vID = $("#exportContent").next().attr("id");
 var firstName = $("#exportContent").next().next().attr("id");
 var lastName = $("#exportContent").next().next().next().attr("id");
 var profilePicture = $("#exportContent").next().next().next().next().attr("id");
+var userEmail = $("#exportContent")
+  .next()
+  .next()
+  .next()
+  .next()
+  .next()
+  .attr("id");
+var uniqueID = $("#exportContent")
+  .next()
+  .next()
+  .next()
+  .next()
+  .next()
+  .next()
+  .attr("id");
 console.log(vID);
 console.log(firstName);
 console.log(lastName);
 console.log(profilePicture);
+console.log(userEmail);
+console.log(uniqueID);
+
+function getUID() {
+  return uniqueID;
+}
 
 function fetchData() {
   const url =
@@ -168,7 +193,9 @@ function fetchData() {
     .then((data) => {
       //console.log(data);
       newId = Object.keys(data).length;
-      $("#commentNumber").html(newId + (newId > 1 ? " Comments" : " Comment"));
+      $("#commentNumber").html(
+        numberWithCommas(newId) + (newId > 1 ? " Comments" : " Comment")
+      );
       var rendered = data.map((comment) => {
         singleComment = `
           <!-- Each comments -->
@@ -195,7 +222,7 @@ function fetchData() {
         ${
           brInStr(comment.body) > 3
             ? `
-          <div class="userCommentBox" style="height: 6em;">
+          <div class="userCommentBox" style="height: 4.3em;">
             ${comment.body}
           </div>
           <div class="comReadMore" onclick="readMore(this)">
@@ -221,7 +248,11 @@ function fetchData() {
               <!-- White space -->
               <div style="width: 100%; height: 1rem;"></div>
               <div class="likeDislikeComment">
-                <div class="tUp" onclick="tUp(this)" style="color: #909090;">
+                <div class="tUp" onclick="tUp(this)" style="color: ${
+                  comment.reaction[uniqueID] === "liked"
+                    ? "rgb(8, 96, 212)"
+                    : "rgb(144, 144, 144)"
+                };">
                   <i
                     class="fa fa-thumbs-up"
                     style="font-size: 1.3rem;"
@@ -232,7 +263,11 @@ function fetchData() {
                 &nbsp;&nbsp;&nbsp;
                 <div class="tUpCount">${comment.reviews.likes}</div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="tDown" onclick="tDown(this)" style="color: #909090;">
+                <div class="tDown" onclick="tDown(this)" style="color: ${
+                  comment.reaction[uniqueID] === "unLiked"
+                    ? "rgb(8, 96, 212)"
+                    : "rgb(144, 144, 144)"
+                };">
                   <i
                     class="fa fa-thumbs-down"
                     style="font-size: 1.3rem; transform: scale(-1, 1);"
@@ -249,7 +284,7 @@ function fetchData() {
                   <img
                     class="userProfilePicFrame"
                     style="margin-top: 0.6rem;"
-                    src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+                    src="${profilePicture}"
                   />
                 </div>
                 <div class="addCommentRight">
@@ -348,7 +383,7 @@ function fetchData() {
             ${
               brInStr(reply.body) > 3
                 ? `
-            <div class="replyCommentBox" style="height: 6em;">${reply.body}</div>
+            <div class="replyCommentBox" style="height: 4.3em;">${reply.body}</div>
             <div class="repReadMore" onclick="readMore(this)">Read more</div>
             <div class="repReadLess" onclick="readLess(this)">Show less</div>
             `
@@ -385,14 +420,14 @@ function fetchData() {
                 REPLY
               </div>
             </div>
-            <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
+            <div id="toWhom" style="padding-top: 2vh; font-size: 1.5vh; display: none"></div>
             <!-- Write comment section -->
             <div class="replyAddReply">
               <div class="userProfileFrame">
                 <img
                   class="userProfilePicFrame"
                   style="width: 30px; height: 30px; margin-top: 0.6rem;"
-                  src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+                  src="${profilePicture}"
                 />
               </div>
               <div class="addCommentRight">
@@ -475,9 +510,8 @@ $("#commentButton").click(function () {
       },
       data: JSON.stringify({
         videoID: "abc123",
-        profilePicture:
-          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
-        user: { firstName: "Sam", lastName: "Jones" },
+        profilePicture: `${profilePicture}`,
+        user: { firstName: `${firstName}`, lastName: `${lastName}` },
         body: txt,
       }),
     };
@@ -491,13 +525,13 @@ $("#commentButton").click(function () {
           <img
             class="userProfilePicFrame"
             style="margin-top: 1rem;"
-            src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+            src="${profilePicture}"
           />
         </div>
         <div class="commentRight">
           <div class="nameAndTime">
             <div style="letter-spacing: 0.03rem;">
-              <b>Richard Lee</b>
+              <b>${firstName} ${lastName}</b>
             </div>
             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div style="color: #909090;">
@@ -518,10 +552,10 @@ $("#commentButton").click(function () {
         </div>
     `);
 
-      if ($(`#userCommentBox${newId + 1}`).height() < 134.391) {
+      if ($(`#userCommentBox${newId + 1}`).height() < 68) {
         $(`#comReadMore${newId + 1}`).css("display", "none");
       } else {
-        $(`#userCommentBox${newId + 1}`).css("height", "6em");
+        $(`#userCommentBox${newId + 1}`).css("height", "4.3em");
       }
 
       $("#commentInput").val("");
@@ -549,37 +583,27 @@ function replyOnComment(e) {
         "Content-Type": "application/json",
       },
       data: JSON.stringify({
-        profilePicture:
-          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
-        user: { firstName: "John", lastName: "Appleseed" },
+        profilePicture: `${profilePicture}`,
+        user: { firstName: `${firstName}`, lastName: `${lastName}` },
         body: txt,
       }),
     };
 
     $.ajax(settings).done(function (response) {
       //console.log(response);
-      $(e)
-        .parent()
-        .parent()
-        .parent()
-        .next()
-        .next()
-        .next()
-        .next()
-        .next()
-        .next().prepend(`
+      $(e).parent().parent().parent().next().next().next().prepend(`
   <div class="replyOnComment">
   <div class="replyOnCommentProfileFrame">
     <img
       class="replyOnCommentProfilePicFrame"
       style="margin-top: 1rem;"
-      src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+      src="${profilePicture}"
     />
   </div>
   <div class="replyOnCommentRight" style="margin: 1.5rem;">
     <div class="nameAndTime">
       <div style="letter-spacing: 0.03rem;">
-        <b>Richard Lee</b>
+        <b>${firstName} ${lastName}</b>
       </div>
       <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
       <div style="color: #909090;">
@@ -591,7 +615,7 @@ function replyOnComment(e) {
     ${
       brInStr(txt) > 3
         ? `
-      <div class="replyCommentBox" style="height: 6em;">${txt}</div>
+      <div class="replyCommentBox" style="height: 4.3em;">${txt}</div>
       <div class="repReadMore" onclick="readMore(this)">Read more</div>
       <div class="repReadLess" onclick="readLess(this)">Show less</div>
       `
@@ -629,14 +653,14 @@ function replyOnComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
+    <div id="toWhom" style="padding-top: 2vh; font-size: 1.5vh; display: none"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
         <img
           class="userProfilePicFrame"
           style="width: 30px; height: 30px; margin-top: 0.6rem;"
-          src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+          src="${profilePicture}"
         />
       </div>
       <div class="addCommentRight">
@@ -663,7 +687,7 @@ function replyOnComment(e) {
       $(e).parent().prev().prev().val("");
       $(e).parent().prev().prev().css("height", "2rem");
       $(e).parent().parent().parent().css("display", "none");
-      showReplies($(e).parent().parent().parent().next().next().next().next());
+      //showReplies($(e).parent().parent().parent().next().next().next().next());
     });
 
     // if ($(".replyCommentBox").height() < 134.391) {
@@ -700,10 +724,22 @@ function newReplyComment(e) {
     .parent()
     .prev()
     .prev()
-    .prev()
-    .prev()
-    .prev()
     .attr("id");
+  if (videoID === undefined) {
+    videoID = $(e)
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .prev()
+      .prev()
+      .prev()
+      .prev()
+      .prev()
+      .attr("id");
+  }
   var createSort = $(e)
     .parent()
     .parent()
@@ -712,10 +748,21 @@ function newReplyComment(e) {
     .parent()
     .parent()
     .prev()
-    .prev()
-    .prev()
-    .prev()
     .attr("id");
+  if (createSort === undefined) {
+    createSort = $(e)
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .prev()
+      .prev()
+      .prev()
+      .prev()
+      .attr("id");
+  }
   var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${videoID}/timeStamp/${createSort}`;
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
@@ -728,11 +775,15 @@ function newReplyComment(e) {
         "Content-Type": "application/json",
       },
       data: JSON.stringify({
-        profilePicture:
-          "https://static.scientificamerican.com/sciam/cache/file/92E141F8-36E4-4331-BB2EE42AC8674DD3_source.jpg",
-        user: { firstName: "Test", lastName: "User" },
+        profilePicture: `${profilePicture}`,
+        user: { firstName: `${firstName}`, lastName: `${lastName}` },
         body:
-          "<span style='color:#909090'>" + "@" + name + "</span>" + " " + txt,
+          "<span style='color:rgb(8, 96, 212)'>" +
+          "@" +
+          name +
+          "</span>" +
+          " " +
+          txt,
       }),
     };
 
@@ -744,13 +795,13 @@ function newReplyComment(e) {
     <img
       class="replyOnCommentProfilePicFrame"
       style="margin-top: 1rem;"
-      src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+      src="${profilePicture}"
     />
   </div>
   <div class="replyOnCommentRight" style="margin: 1.5rem;">
     <div class="nameAndTime">
       <div style="letter-spacing: 0.03rem;">
-        <b>Richard Lee</b>
+        <b>${firstName} ${lastName}</b>
       </div>
       <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
       <div style="color: #909090;">
@@ -762,12 +813,12 @@ function newReplyComment(e) {
     ${
       brInStr(txt) > 3
         ? `
-      <div class="replyCommentBox" style="height: 6em;"><span style='color:#909090'>@${name}</span> ${txt}</div>
+      <div class="replyCommentBox" style="height: 4.3em;"><span style='color:rgb(8, 96, 212)'>@${name}</span> ${txt}</div>
       <div class="repReadMore" onclick="readMore(this)">Read more</div>
       <div class="repReadLess" onclick="readLess(this)">Show less</div>
       `
         : `
-        <div class="replyCommentBox"><span style='color:#909090'>@${name}</span> ${txt}</div>
+        <div class="replyCommentBox"><span style='color:rgb(8, 96, 212)'>@${name}</span> ${txt}</div>
         <div class="repReadMore" style="display: none;" onclick="readMore(this)">Read more</div>
         <div class="repReadLess" onclick="readLess(this)">Show less</div>
         `
@@ -804,14 +855,14 @@ function newReplyComment(e) {
         REPLY
       </div>
     </div>
-    <div id="toWhom" style="padding-top: 1vh; font-size: 1.5vh"></div>
+    <div id="toWhom" style="padding-top: 2vh; font-size: 1.5vh; display: none"></div>
     <!-- Write comment section -->
     <div class="replyAddReply">
       <div class="userProfileFrame">
         <img
           class="userProfilePicFrame"
           style="width: 30px; height: 30px; margin-top: 0.6rem;"
-          src="https://lh3.googleusercontent.com/a-/AOh14GhCDmxhE1GHV9lIgPTf4jTGr-pEsIxh4m7b6Oz0DQ=s88"
+          src="${profilePicture}"
         />
       </div>
       <div class="addCommentRight">
@@ -871,7 +922,7 @@ function readMore(e) {
 }
 
 function readLess(e) {
-  $(e).prev().prev().css("height", "6em");
+  $(e).prev().prev().css("height", "4.3em");
   $(e).css("display", "none");
   $(e).prev().css("display", "inline");
 }
@@ -903,17 +954,21 @@ function replyToComment(e) {
           .eq(0)[0].innerHTML
       }`
     );
+  $(e).parent().next().css("display", "flex");
 }
 
 function replyCancel(e) {
   $(e).parent().parent().parent().css("display", "none");
   $(e).parent().prev().prev().css("height", "2em");
+  $(e).parent().prev().prev().val("");
 }
 
 function replyCancelWithComment(e) {
   $(e).parent().parent().parent().css("display", "none");
   $(e).parent().prev().prev().css("height", "2em");
+  $(e).parent().prev().prev().val("");
   $(e).parent().parent().parent().prev().html("");
+  $(e).parent().parent().parent().prev().css("display", "none");
 }
 
 function tUp(e) {
@@ -927,6 +982,10 @@ function tUp(e) {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/like/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
         timeout: 0,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
       $.ajax(settings).done(function (response) {
@@ -937,7 +996,7 @@ function tUp(e) {
 
         if ($(e).next().next().css("color") == "rgb(8, 96, 212)") {
           var settings = {
-            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLike/${videoID}/timeStamp/${createSort}`,
+            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLikeWithout/${videoID}/timeStamp/${createSort}`,
             method: "PUT",
             timeout: 0,
           };
@@ -953,6 +1012,10 @@ function tUp(e) {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
         timeout: 0,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
       $.ajax(settings).done(function (response) {
@@ -977,6 +1040,10 @@ function tDown(e) {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/disLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
         timeout: 0,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
       $.ajax(settings).done(function (response) {
@@ -984,7 +1051,7 @@ function tDown(e) {
         $(e).css("color", "rgb(8, 96, 212)");
         if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
           var settings = {
-            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLike/${videoID}/timeStamp/${createSort}`,
+            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLikeWithout/${videoID}/timeStamp/${createSort}`,
             method: "PUT",
             timeout: 0,
           };
@@ -1003,6 +1070,10 @@ function tDown(e) {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
         timeout: 0,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
       $.ajax(settings).done(function (response) {

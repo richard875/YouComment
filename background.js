@@ -48,11 +48,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             b64utoutf8(id_token.split(".")[1])
           );
 
-          //console.log(user_info);
+          console.log(user_info);
           // Store User info
           chrome.storage.sync.set({ firstName: user_info.given_name });
           chrome.storage.sync.set({ lastName: user_info.family_name });
           chrome.storage.sync.set({ profilePicture: user_info.picture });
+          chrome.storage.sync.set({ userEmail: user_info.email });
+          chrome.storage.sync.set({ uniqueID: user_info.sub });
 
           if (
             (user_info.iss === "https://accounts.google.com" ||
@@ -83,5 +85,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   } else if (request.message === "isUserSignedIn") {
     sendResponse(is_user_signed_in());
+    return true;
   }
 });

@@ -1,6 +1,6 @@
 {
   "name": "YouComment",
-  "description": "Hello World!",
+  "description": "Comment on Youtube™ videos where comments are turned off",
   "version": "1.0",
   "manifest_version": 2,
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArk5tpZtQ1buPWemuppDs/Wfl+T3NxUWi7zSfVXaHYfOwixv8W6o6cWyyVxfeFxdEX8zMv1BPS+SCGGo9+GyOEAJE9kTptLjv3htmpIO6n9uHy2OASeUlg7DlKBVhU7fVF4GFG7A8X3Ix1XRU3nwLWlDEEaiojU7gDUhy4CKqyTNMJ8Hu1xsPzg0djeLb3DR6qaM3asjODiZDguZ2Cq5LxQvoPKrbJx7+Bj3PSiWoh8mifPVC13RIw4VZ3wwVyn68ajMsK+1R08bqZT5lxdbSUT7+QwgLN7y01rSsK+q7165G5oGR7jS4GSJCh2DBSEk0R8Scha5MQqDwkeUml3MMTQIDAQAB",
@@ -26,8 +26,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*", "https://www.youtube.com/"],
-      "js": ["jquery-3.5.1.min.js", "toChange.js"],
-      "css": ["styles.css"]
+      "js": ["jquery-3.5.1.min.js", "toChange.js"]
     }
   ],
   "permissions": [

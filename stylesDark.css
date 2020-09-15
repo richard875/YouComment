@@ -13,6 +13,7 @@
   flex-direction: row;
   justify-content: space-between;
   font-size: 1.6rem;
+  color: white;
 }
 
 .introAndNumTop {
@@ -78,8 +79,8 @@
   flex: 0.02;
   /* background-color: lawngreen; */
   /* display: flex;
-  align-items: flex-start;
-  justify-content: center; */
+    align-items: flex-start;
+    justify-content: center; */
 }
 
 .userProfilePicFrame {
@@ -211,7 +212,7 @@
   font-size: 1.4rem;
   overflow: hidden;
   line-height: 1.5rem;
-  color: #444;
+  color: white;
   padding: 5px;
   border-bottom: 1px solid #909090;
   /* background-color: blue; */
@@ -222,7 +223,7 @@
 }
 
 .runderline {
-  background-color: black;
+  background-color: white;
   /* display: inline-block; */
   height: 2px;
   width: 96.8%;
@@ -241,6 +242,7 @@
   /* background-color: khaki; */
   display: flex;
   flex-direction: row;
+  color: white;
 }
 
 .commentProfileFrame {
@@ -457,5 +459,5 @@
 }
 
 /* display: flex;
-  align-items: center;
-  justify-content: center; */
+    align-items: center;
+    justify-content: center; */

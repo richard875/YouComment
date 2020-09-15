@@ -1,5 +1,4 @@
 var url = window.location.href;
-//console.log(url);
 
 function mainFuction() {
   return new Promise(function (resolve, reject) {
@@ -25,11 +24,37 @@ function getPP() {
   });
 }
 
+function getEmail() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("userEmail", function (options) {
+      resolve(options.userEmail);
+    });
+  });
+}
+
+function getUniqueID() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("uniqueID", function (options) {
+      resolve(options.uniqueID);
+    });
+  });
+}
+
 var checkExist = setInterval(async function () {
   var firstName = await mainFuction();
   var lastName = await getLastName();
   var profilePicture = await getPP();
-  //console.log(firstName);
+  var userEmail = await getEmail();
+  var uniqueID = await getUniqueID();
+
+  // if ($("html").attr("dark")) {
+  //   console.log("Dark mode");
+  // } else {
+  //   console.log("Light mode");
+  // }
+
+  var isDark = $("html").attr("dark");
+
   if (
     $(
       "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
@@ -39,15 +64,20 @@ var checkExist = setInterval(async function () {
     var str = $(
       "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
     ).text();
-    //console.log(str);
+    console.log(str);
     $("ytd-comments").replaceWith(
       `
       <!-- Copy This -->
-      <link rel="stylesheet" href="./styles.css" />
       <link
-        rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
-      />
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+    />
+      <link rel="stylesheet" ${
+        isDark
+          ? 'href = "http://localhost:5500/stylesDark.css"'
+          : 'href = "http://localhost:5500/styles.css"'
+      } / >
+     
       <div id="bigCont" style="color: #030303">
         <!-- Export to Background -->
         <div id="exportContent"></div>
@@ -55,6 +85,8 @@ var checkExist = setInterval(async function () {
         <div id="${firstName}"></div>
         <div id="${lastName}"></div>
         <div id="${profilePicture}"></div>
+        <div id="${userEmail}"></div>
+        <div id="${uniqueID}"></div>
         <!-- Finish Export to Background -->
         <!-- Top Line -->
         <div class="introAndNum">
