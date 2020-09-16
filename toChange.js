@@ -120,7 +120,7 @@ function process() {
   
         <div id="bigCont" style="color: #030303">
           <!-- Export to Background -->
-          <div id="exportContent">${url}</div>
+          <div id="exportContent"></div>
           <div id="${url}"></div>
           <div id="${firstName}"></div>
           <div id="${lastName}"></div>
