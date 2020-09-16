@@ -277,6 +277,25 @@ function fetchData() {
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <div style="cursor: pointer;" onclick="reply(this)">REPLY</div>
+                ${
+                  comment.googleID === uniqueID
+                    ? `
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div
+                    class="tDown"
+                    id="deleteComment"
+                    onclick="deleteComment(this)"
+                    style="color: #909090"
+                  ><i
+                    class="fa fa-trash"
+                    style="font-size: 1.3rem; transform: scale(-1, 1)"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="tDowntooltiptext">Delete</span>
+                </div>
+                `
+                    : ``
+                }
               </div>
               <!-- 1 -->
               <div class="replyAddComment">
@@ -513,6 +532,7 @@ $("#commentButton").click(function () {
         profilePicture: `${profilePicture}`,
         user: { firstName: `${firstName}`, lastName: `${lastName}` },
         body: txt,
+        googleID: `${uniqueID}`,
       }),
     };
 
@@ -566,6 +586,40 @@ $("#commentButton").click(function () {
     });
   }
 });
+
+function deleteComment(e) {
+  if (!$(e).next().length) {
+    $(e).after(`
+  <div style="width: 2vh; height: 1px"></div>
+  <div id="toCheck" onclick="cencelDelete(this)" style="cursor: pointer; font-weight: bold">Cancel</div>
+  <div style="width: 1vh; height: 1px"></div>
+  <div id="" onclick="confirm(this)" style="cursor: pointer; font-weight: bold; color: red">Delete</div>
+  `);
+  }
+}
+
+function confirm(e) {
+  //$(e).attr("id", "confirmed");
+  var vID = $(e).parent().next().next().attr("id");
+  var createSort = $(e).parent().next().next().next().attr("id");
+
+  var settings = {
+    url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/deleteComment/${vID}/timeStamp/${createSort}`,
+    method: "DELETE",
+    timeout: 0,
+  };
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    $(e).parent().parent().parent().remove();
+  });
+}
+
+function cencelDelete(e) {
+  $(e).prev().remove();
+  $(e).next().next().remove();
+  $(e).next().remove();
+  $(e).remove();
+}
 
 function replyOnComment(e) {
   var txt = $(e).parent().prev().prev().val();

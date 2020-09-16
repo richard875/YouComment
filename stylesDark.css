@@ -1,4 +1,9 @@
-/* #030303 */
+.anIDNoOneWillEverThinkOf {
+  background-color: rgb(24, 24, 24);
+  margin-top: -7vh;
+  position: relative;
+  z-index: 999;
+}
 
 #bigCont {
   /* height: 500px; */

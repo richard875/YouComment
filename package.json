@@ -1,0 +1,23 @@
+{
+  "name": "Frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apiRenderedjs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richard875/YouComment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/richard875/YouComment/issues"
+  },
+  "homepage": "https://github.com/richard875/YouComment#readme",
+  "dependencies": {
+    "content-scripts-register-polyfill": "^1.0.5"
+  }
+}
