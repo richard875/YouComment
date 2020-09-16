@@ -106,6 +106,44 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function encodeHTML(s) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;")
+    .replace(/(\r\n|\n|\r)/g, "<br />");
+}
+
+//Get YouTube ID from various YouTube URL
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  } else {
+    ID = url;
+  }
+  return ID;
+}
+
+function getLength() {
+  return new Promise((resolve) => {
+    //setTimeout(() => {
+    const url =
+      "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/abc123";
+    fetch(url)
+      .then((resp) => resp.json())
+      .then((data) => {
+        const newId = Object.keys(data).length;
+        resolve(newId);
+        //}, 5000);
+      });
+  });
+}
+
 // Dummy Data
 var fakeDate = {
   totalResults: 2,
@@ -174,33 +212,12 @@ var uniqueID = $("#exportContent")
   .next()
   .next()
   .attr("id");
-console.log(vID);
-console.log(firstName);
-console.log(lastName);
-console.log(profilePicture);
-console.log(userEmail);
-console.log(uniqueID);
-
-/**
- * Get YouTube ID from various YouTube URL
- * @author: takien
- * @url: http://takien.com
- * For PHP YouTube parser, go here http://takien.com/864
- */
-
-function YouTubeGetID(url) {
-  var ID = "";
-  url = url
-    .replace(/(>|<)/gi, "")
-    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  if (url[2] !== undefined) {
-    ID = url[2].split(/[^0-9a-z_\-]/i);
-    ID = ID[0];
-  } else {
-    ID = url;
-  }
-  return ID;
-}
+// console.log(vID);
+// console.log(firstName);
+// console.log(lastName);
+// console.log(profilePicture);
+// console.log(userEmail);
+// console.log(uniqueID);
 
 vID = YouTubeGetID(vID);
 
@@ -519,21 +536,6 @@ function fetchData() {
 }
 fetchData();
 
-function getLength() {
-  return new Promise((resolve) => {
-    //setTimeout(() => {
-    const url =
-      "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/abc123";
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((data) => {
-        const newId = Object.keys(data).length;
-        resolve(newId);
-        //}, 5000);
-      });
-  });
-}
-
 function textAreaFocus() {
   $("#commentButtonBox").css("display", "flex");
   $("#commentInput").css("height", "2rem");
@@ -553,8 +555,10 @@ $("#commentButton").click(function () {
   var url =
     "https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/createVideo";
 
-  if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
+  if (txt.replace(/(\s|\r\n|\n|\r)/g, "").length) {
+    txt = encodeHTML(txt);
+    //txt = txt.replace(/(\r\n|\n)/g, "<br />");
+    console.log(txt);
     var settings = {
       url: url,
       method: "POST",
@@ -668,7 +672,8 @@ function replyOnComment(e) {
   var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${video}/timeStamp/${createSort}`;
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
+    txt = encodeHTML(txt);
+    //txt = txt.replace(/(\r\n|\n)/g, "<br />");
     var settings = {
       url: url,
       method: "PUT",
@@ -860,7 +865,8 @@ function newReplyComment(e) {
   var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/replyToMainComment/${videoID}/timeStamp/${createSort}`;
 
   if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
-    txt = txt.replace(/(\r\n|\n)/g, "<br />");
+    txt = encodeHTML(txt);
+    //txt = txt.replace(/(\r\n|\n)/g, "<br />");
     var settings = {
       url: url,
       method: "PUT",

@@ -1,8 +1,20 @@
 chrome.extension.onMessage.addListener(function (request, sender, response) {
   if (request.type === "getDoc") {
+    if ($("#anIDNoOneWillEverThinkOf").length) {
+      $("#anIDNoOneWillEverThinkOf").remove();
+    }
     //alert("git it!");
-    process();
-    response(document.body.innerHTML);
+    $(function () {
+      var triggerOnceforShare = true;
+      $(window).scroll(function () {
+        if ($(this).scrollTop() >= 300 && triggerOnceforShare) {
+          triggerOnceforShare = false;
+          //alert("ad just passed.");
+          process();
+          response(document.body.innerHTML);
+        }
+      });
+    });
   }
 
   return true;
@@ -248,5 +260,5 @@ function process() {
 
       //clearInterval(checkExist);
     }
-  }, 3000); // check every 100ms
+  }, 1500); // check every 100ms
 }
