@@ -660,8 +660,12 @@ $("#commentButton").click(function () {
 });
 
 function editComment(e) {
-  $(e).parent().before(`
-  <div class="replyAddComment" style="display: flex">
+  if ($(e).parent().next().css("display", "flex")) {
+    $(e).parent().next().css("display", "none");
+  }
+  if (!$(e).parent().prev().attr("id")) {
+    $(e).parent().before(`
+  <div class="replyAddComment" id="toEditAComment" style="display: flex">
     <div class="userProfileFrame">
       <img
         class="userProfilePicFrame"
@@ -671,7 +675,7 @@ function editComment(e) {
     </div>
       <div class="addCommentRight">
         <textarea
-          placeholder="Edit you comment..."
+          placeholder="Edit your comment..."
           class="commentInput"
           onfocus="textExpand(this)"
         ></textarea>
@@ -687,7 +691,8 @@ function editComment(e) {
       </div>
     </div>
   `);
-  $(e).parent().prev().children().eq(1).children().eq(0).focus();
+    $(e).parent().prev().children().eq(1).children().eq(0).focus();
+  }
 }
 
 function cancelEdit(e) {
@@ -1156,6 +1161,9 @@ function readLess(e) {
 }
 
 function reply(e) {
+  if ($(e).parent().prev().attr("id") === "toEditAComment") {
+    $(e).parent().prev().remove();
+  }
   $(e).parent().next().css("display", "flex");
   $(e).parent().next().children().eq(1).children().eq(0)[0].focus();
 }
@@ -1206,6 +1214,9 @@ function tUp(e) {
 
   switch (color) {
     case "rgb(144, 144, 144)":
+      $(e).css("color", "rgb(8, 96, 212)");
+      var num = $(e).next()[0].innerHTML;
+      $(e).next()[0].innerHTML = Number(num) + 1;
       var settings = {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/like/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
@@ -1216,26 +1227,27 @@ function tUp(e) {
         data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
+      if ($(e).next().next().css("color") == "rgb(8, 96, 212)") {
+        $(e).next().next().css("color", "rgb(144, 144, 144)");
+        var inner = {
+          url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLikeWithout/${videoID}/timeStamp/${createSort}`,
+          method: "PUT",
+          timeout: 0,
+        };
+        $.ajax(inner).done(function (response) {
+          //console.log(response);
+        });
+      }
+
       $.ajax(settings).done(function (response) {
         //console.log(response);
-        $(e).css("color", "rgb(8, 96, 212)");
-        var num = $(e).next()[0].innerHTML;
-        $(e).next()[0].innerHTML = Number(num) + 1;
-
-        if ($(e).next().next().css("color") == "rgb(8, 96, 212)") {
-          var settings = {
-            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLikeWithout/${videoID}/timeStamp/${createSort}`,
-            method: "PUT",
-            timeout: 0,
-          };
-          $.ajax(settings).done(function (response) {
-            //console.log(response);
-            $(e).next().next().css("color", "rgb(144, 144, 144)");
-          });
-        }
       });
       break;
     case "rgb(8, 96, 212)":
+      $(e).css("color", "rgb(144, 144, 144)");
+      var num = $(e).next()[0].innerHTML;
+      $(e).next()[0].innerHTML = Number(num) - 1;
+      $(e).next().next().css("color", "rgb(144, 144, 144)");
       var settings = {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
@@ -1248,10 +1260,6 @@ function tUp(e) {
 
       $.ajax(settings).done(function (response) {
         //console.log(response);
-        $(e).css("color", "rgb(144, 144, 144)");
-        var num = $(e).next()[0].innerHTML;
-        $(e).next()[0].innerHTML = Number(num) - 1;
-        $(e).next().next().css("color", "rgb(144, 144, 144)");
       });
       break;
   }
@@ -1264,6 +1272,7 @@ function tDown(e) {
 
   switch (color) {
     case "rgb(144, 144, 144)":
+      $(e).css("color", "rgb(8, 96, 212)");
       var settings = {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/disLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
@@ -1274,26 +1283,29 @@ function tDown(e) {
         data: JSON.stringify({ id: `${uniqueID}` }),
       };
 
+      if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
+        $(e).prev().prev().css("color", "rgb(144, 144, 144)");
+        var num = $(e).prev()[0].innerHTML;
+        $(e).prev()[0].innerHTML = Number(num) - 1;
+
+        var inner = {
+          url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLikeWithout/${videoID}/timeStamp/${createSort}`,
+          method: "PUT",
+          timeout: 0,
+        };
+
+        $.ajax(inner).done(function (response) {
+          //console.log(response);
+        });
+      }
+
       $.ajax(settings).done(function (response) {
         //console.log(response);
-        $(e).css("color", "rgb(8, 96, 212)");
-        if ($(e).prev().prev().css("color") == "rgb(8, 96, 212)") {
-          var settings = {
-            url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unLikeWithout/${videoID}/timeStamp/${createSort}`,
-            method: "PUT",
-            timeout: 0,
-          };
-
-          $.ajax(settings).done(function (response) {
-            //console.log(response);
-            $(e).prev().prev().css("color", "rgb(144, 144, 144)");
-            var num = $(e).prev()[0].innerHTML;
-            $(e).prev()[0].innerHTML = Number(num) - 1;
-          });
-        }
       });
       break;
     case "rgb(8, 96, 212)":
+      $(e).css("color", "rgb(144, 144, 144)");
+
       var settings = {
         url: `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/unDisLike/${videoID}/timeStamp/${createSort}`,
         method: "PUT",
@@ -1306,7 +1318,6 @@ function tDown(e) {
 
       $.ajax(settings).done(function (response) {
         //console.log(response);
-        $(e).css("color", "rgb(144, 144, 144)");
       });
       break;
   }

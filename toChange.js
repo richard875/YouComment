@@ -7,7 +7,7 @@ chrome.extension.onMessage.addListener(function (request, sender, response) {
       var videoUrl = window.location.href;
       var triggerOnceforShare = true;
       $(window).scroll(function () {
-        if ($(this).scrollTop() >= 200 && triggerOnceforShare) {
+        if ($(this).scrollTop() >= 300 && triggerOnceforShare) {
           triggerOnceforShare = false;
           //alert(YouTubeGetID(videoUrl).length);
           if (YouTubeGetID(videoUrl).length === 11) {
@@ -100,7 +100,7 @@ function process() {
     $("#anIDNoOneWillEverThinkOf").remove();
   }
 
-  var checkExist = setInterval(async function () {
+  var checkExist = setTimeout(async function () {
     var firstName = await mainFuction();
     var lastName = await getLastName();
     var profilePicture = await getPP();
@@ -121,7 +121,7 @@ function process() {
       $("ytd-comments").children().eq(2).attr("id") ===
         "anIDNoOneWillEverThinkOf"
     ) {
-      clearInterval(checkExist);
+      //clearInterval(checkExist);
       //console.log("Exists!");
       // var str =
       //   $(
@@ -210,7 +210,7 @@ function process() {
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <script src="https://raw.githubusercontent.com/richard875/YouComment/master/apiRenderedjs.js?token=AM2BJR7N4NVAXRONKNQ23OS7NXMHO"></script>
         </div>
         `);
         } else {
@@ -280,12 +280,12 @@ function process() {
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <script src="https://raw.githubusercontent.com/richard875/YouComment/master/apiRenderedjs.js?token=AM2BJR7N4NVAXRONKNQ23OS7NXMHO"></script>
         </div>
         `);
         }
       }
       //clearInterval(checkExist);
     }
-  }, 300); // check every 100ms
+  }, 1000); // check every 100ms
 }
