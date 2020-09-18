@@ -6,6 +6,66 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   }
 });
 
+async function is_signed_in() {
+  function mainFuction() {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("firstName", function (options) {
+        resolve(options.firstName);
+      });
+    });
+  }
+
+  function getLastName() {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("lastName", function (options) {
+        resolve(options.lastName);
+      });
+    });
+  }
+
+  function getPP() {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("profilePicture", function (options) {
+        resolve(options.profilePicture);
+      });
+    });
+  }
+
+  function getEmail() {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("userEmail", function (options) {
+        resolve(options.userEmail);
+      });
+    });
+  }
+
+  function getUniqueID() {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get("uniqueID", function (options) {
+        resolve(options.uniqueID);
+      });
+    });
+  }
+
+  var firstName = await mainFuction();
+  var lastName = await getLastName();
+  var profilePicture = await getPP();
+  var userEmail = await getEmail();
+  var uniqueID = await getUniqueID();
+
+  if (
+    firstName === "no" &&
+    lastName === "no" &&
+    profilePicture === "no" &&
+    userEmail === "no" &&
+    uniqueID === "no"
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 let user_signed_in = false;
 const CLINT_ID = encodeURIComponent(
   "654630289150-68nqrjmomrnmcel0r737glpfhml8mmh3.apps.googleusercontent.com"
@@ -87,6 +147,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.message === "logout") {
     chrome.browserAction.setPopup({ popup: "./index.html" }, function () {
       user_signed_in = false;
+      chrome.storage.sync.set({ firstName: "no" });
+      chrome.storage.sync.set({ lastName: "no" });
+      chrome.storage.sync.set({ profilePicture: "no" });
+      chrome.storage.sync.set({ userEmail: "no" });
+      chrome.storage.sync.set({ uniqueID: "no" });
       sendResponse("success");
     });
 
@@ -94,5 +159,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.message === "isUserSignedIn") {
     sendResponse(is_user_signed_in());
     return true;
+  }
+});
+
+chrome.runtime.onStartup.addListener(async function (activeInfo) {
+  console.log(await is_signed_in());
+  if (await is_signed_in()) {
+    chrome.browserAction.setPopup({ popup: "./signOut.html" }, function () {});
+  } else {
+    chrome.browserAction.setPopup({ popup: "./index.html" }, function () {});
   }
 });

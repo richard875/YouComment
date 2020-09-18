@@ -114,6 +114,36 @@ function encodeHTML(s) {
     .replace(/(\r\n|\n|\r)/g, "<br />");
 }
 
+function clearNum(num) {
+  if (num >= 1000000000000) {
+    if (num % 1000000000000 == 0) {
+      return (num / 1000000000000).toFixed(0) + "T";
+    } else {
+      return (num / 1000000000000).toFixed(1) + "T";
+    }
+  } else if (num >= 1000000000) {
+    if (num % 1000000000 == 0) {
+      return (num / 1000000000).toFixed(0) + "B";
+    } else {
+      return (num / 1000000000).toFixed(1) + "B";
+    }
+  } else if (num >= 1000000) {
+    if (num % 1000000 == 0) {
+      return (num / 1000000).toFixed(0) + "M";
+    } else {
+      return (num / 1000000).toFixed(1) + "M";
+    }
+  } else if (num >= 1000) {
+    if (num % 1000 == 0) {
+      return (num / 1000).toFixed(0) + "K";
+    } else {
+      return (num / 1000).toFixed(1) + "K";
+    }
+  } else {
+    return num;
+  }
+}
+
 //Get YouTube ID from various YouTube URL
 function YouTubeGetID(url) {
   var ID = "";
@@ -264,9 +294,10 @@ function fetchData() {
                 <div style="letter-spacing: 0.03rem;">
                   <b>${comment.user.firstName} ${comment.user.lastName}</b>
                 </div>
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div style="color: #909090;">
                   ${timeSince(Date.parse(comment.createdAt))} ago
+                  ${comment.edited ? ` (edited)` : ``}
                 </div>
               </div>
               <!-- White space -->
@@ -332,6 +363,8 @@ function fetchData() {
                 ${
                   comment.googleID === uniqueID
                     ? `
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div style="cursor: pointer" onclick="editComment(this)" class="replyComment">EDIT</div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <div
                     class="tDown"
@@ -625,6 +658,101 @@ $("#commentButton").click(function () {
     });
   }
 });
+
+function editComment(e) {
+  $(e).parent().before(`
+  <div class="replyAddComment" style="display: flex">
+    <div class="userProfileFrame">
+      <img
+        class="userProfilePicFrame"
+        style="margin-top: 0.6rem;"
+        src="${profilePicture}"
+      />
+    </div>
+      <div class="addCommentRight">
+        <textarea
+          placeholder="Edit you comment..."
+          class="commentInput"
+          onfocus="textExpand(this)"
+        ></textarea>
+        <div class="runderline"></div>
+        <div id="replyCommentButtonBox">
+          <div class="replyCancelButton" onclick="cancelEdit(this)">
+            CANCEL
+          </div>
+          <div id="commentButton" style="width: 80px;" onclick="confirmEdit(this)">
+            EDIT
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+  $(e).parent().prev().children().eq(1).children().eq(0).focus();
+}
+
+function cancelEdit(e) {
+  $(e).parent().parent().parent().remove();
+}
+
+function confirmEdit(e) {
+  var txt = $(e).parent().prev().prev().val();
+  var video = $(e).parent().parent().parent().next().next().next().attr("id");
+  var createSort = $(e)
+    .parent()
+    .parent()
+    .parent()
+    .next()
+    .next()
+    .next()
+    .next()
+    .attr("id");
+  var url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/editComment/${video}/timeStamp/${createSort}`;
+
+  if (txt.replace(/(\s|\r\n|\n)/g, "").length) {
+    txt = encodeHTML(txt);
+
+    var settings = {
+      url: url,
+      method: "PUT",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({ body: txt }),
+    };
+
+    $.ajax(settings).done(function (response) {
+      //console.log(response);
+      $(e).parent().parent().parent().prev().prev().prev().prev().html(txt);
+      $(e)
+        .parent()
+        .parent()
+        .parent()
+        .prev()
+        .prev()
+        .prev()
+        .prev()
+        .prev()
+        .prev()
+        .children()
+        .eq(2).html(`
+          ${$(e)
+            .parent()
+            .parent()
+            .parent()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .children()
+            .eq(2)
+            .html()} (edited)`);
+      $(e).parent().parent().parent().remove();
+    });
+  }
+}
 
 function deleteComment(e) {
   if (!$(e).next().length) {

@@ -1,17 +1,23 @@
+var videoUrl = window.location.href;
+
 chrome.extension.onMessage.addListener(function (request, sender, response) {
   if (request.type === "getDoc") {
-    if ($("#anIDNoOneWillEverThinkOf").length) {
-      $("#anIDNoOneWillEverThinkOf").remove();
-    }
     //alert("git it!");
     $(function () {
+      var videoUrl = window.location.href;
       var triggerOnceforShare = true;
       $(window).scroll(function () {
-        if ($(this).scrollTop() >= 300 && triggerOnceforShare) {
+        if ($(this).scrollTop() >= 200 && triggerOnceforShare) {
           triggerOnceforShare = false;
-          //alert("ad just passed.");
-          process();
-          response(document.body.innerHTML);
+          //alert(YouTubeGetID(videoUrl).length);
+          if (YouTubeGetID(videoUrl).length === 11) {
+            if ($("#anIDNoOneWillEverThinkOf").length) {
+              $("#anIDNoOneWillEverThinkOf").remove();
+            }
+            //alert("ad just passed.");
+            process();
+            response(document.body.innerHTML);
+          }
         }
       });
     });
@@ -24,6 +30,21 @@ chrome.extension.onMessage.addListener(function (request, sender, response) {
 
 // if (document.body) process();
 // else document.addEventListener("DOMContentLoaded", process);
+
+//Get YouTube ID from various YouTube URL
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  } else {
+    ID = url;
+  }
+  return ID;
+}
 
 function mainFuction() {
   return new Promise(function (resolve, reject) {
@@ -79,21 +100,13 @@ function process() {
     $("#anIDNoOneWillEverThinkOf").remove();
   }
 
-  var checkExist = setTimeout(async function () {
-    // if ($("ytd-comments").length) {
-    //   clearInterval(checkExist);
-    // }
+  var checkExist = setInterval(async function () {
     var firstName = await mainFuction();
     var lastName = await getLastName();
     var profilePicture = await getPP();
     var userEmail = await getEmail();
     var uniqueID = await getUniqueID();
-
-    // if ($("html").attr("dark")) {
-    //   console.log("Dark mode");
-    // } else {
-    //   console.log("Light mode");
-    // }
+    //alert(firstName + lastName + profilePicture + userEmail + uniqueID);
 
     if ($("#anIDNoOneWillEverThinkOf").length) {
       $("#anIDNoOneWillEverThinkOf").remove();
@@ -108,16 +121,30 @@ function process() {
       $("ytd-comments").children().eq(2).attr("id") ===
         "anIDNoOneWillEverThinkOf"
     ) {
+      clearInterval(checkExist);
       //console.log("Exists!");
       // var str =
       //   $(
       //     "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
       //   ).text() === "Comments are turned off. ";
       //console.log(str);
-
-      if (!$("#anIDNoOneWillEverThinkOf").length) {
-        console.log("it is");
-        $("ytd-comments").append(`
+      if (
+        firstName === "no" &&
+        lastName === "no" &&
+        profilePicture === "no" &&
+        userEmail === "no" &&
+        uniqueID === "no"
+      ) {
+        $(
+          "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
+        ).html("Please login to YouComment!");
+        $(
+          "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > a"
+        ).remove();
+      } else {
+        if (!$("#anIDNoOneWillEverThinkOf").length) {
+          console.log("it is");
+          $("ytd-comments").append(`
         <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">
         <!-- Copy This -->
         <link
@@ -186,8 +213,8 @@ function process() {
         <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
         </div>
         `);
-      } else {
-        $("#anIDNoOneWillEverThinkOf").replaceWith(`
+        } else {
+          $("#anIDNoOneWillEverThinkOf").replaceWith(`
         <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">
         <!-- Copy This -->
         <link
@@ -256,9 +283,9 @@ function process() {
         <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
         </div>
         `);
+        }
       }
-
       //clearInterval(checkExist);
     }
-  }, 1500); // check every 100ms
+  }, 300); // check every 100ms
 }
