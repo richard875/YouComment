@@ -270,9 +270,20 @@ function getUID() {
 
 function fetchData() {
   const url = `https://k9tedm36fj.execute-api.ap-southeast-2.amazonaws.com/dev/video/${vID}`;
-  fetch(url)
-    .then((resp) => resp.json())
-    .then((data) => {
+  var settings = {
+    url: url,
+    method: "GET",
+    timeout: 0,
+  };
+
+  $.ajax(settings)
+    .done(function (data) {
+      //   console.log(response);
+      // });
+
+      // fetch(url)
+      //   .then((resp) => resp.json())
+      //   .then((data) => {
       //console.log(data);
       newId = Object.keys(data).length;
       $("#commentNumber").html(

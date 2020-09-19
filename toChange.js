@@ -1,5 +1,13 @@
 var videoUrl = window.location.href;
 
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
 chrome.extension.onMessage.addListener(function (request, sender, response) {
   if (request.type === "getDoc") {
     //alert("git it!");
@@ -15,6 +23,8 @@ chrome.extension.onMessage.addListener(function (request, sender, response) {
               $("#anIDNoOneWillEverThinkOf").remove();
             }
             //alert("ad just passed.");
+            console.log("Once");
+            wait(300);
             process();
             response(document.body.innerHTML);
           }
@@ -153,8 +163,8 @@ function process() {
       />
         <link rel="stylesheet" ${
           isDark
-            ? 'href = "http://localhost:5500/stylesDark.css"'
-            : 'href = "http://localhost:5500/styles.css"'
+            ? 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"'
+            : 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'
         } / >
   
         <div id="bigCont" style="color: #030303">
@@ -207,10 +217,10 @@ function process() {
           <div id="commentSection"></div>
         </div>
   
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="https://raw.githubusercontent.com/richard875/YouComment/master/apiRenderedjs.js?token=AM2BJR7N4NVAXRONKNQ23OS7NXMHO"></script>
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
         </div>
         `);
         } else {
@@ -223,8 +233,8 @@ function process() {
       />
         <link rel="stylesheet" ${
           isDark
-            ? 'href = "http://localhost:5500/stylesDark.css"'
-            : 'href = "http://localhost:5500/styles.css"'
+            ? 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"'
+            : 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'
         } / >
   
         <div id="bigCont" style="color: #030303">
@@ -277,15 +287,15 @@ function process() {
           <div id="commentSection"></div>
         </div>
   
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="https://raw.githubusercontent.com/richard875/YouComment/master/apiRenderedjs.js?token=AM2BJR7N4NVAXRONKNQ23OS7NXMHO"></script>
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
         </div>
         `);
         }
       }
       //clearInterval(checkExist);
     }
-  }, 1000); // check every 100ms
+  }, 500); // check every 100ms
 }
