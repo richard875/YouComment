@@ -1,3 +1,11 @@
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+  dataLayer.push(arguments);
+}
+gtag("js", new Date());
+
+gtag("config", "UA-170975862-4");
+
 function textExpand(e) {
   var className = $(e).attr("class");
   // Targets all textareas with class "commentInput"

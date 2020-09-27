@@ -219,9 +219,11 @@ function process() {
         </div>
   
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
-        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
         </div>
         `);
         } else {
@@ -290,9 +292,11 @@ function process() {
         </div>
   
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
-        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
         </div>
         `);
         }
