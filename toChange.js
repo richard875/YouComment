@@ -187,6 +187,7 @@ function process() {
                 <span class="tooltiptext">Sort comments</span>
               </div> -->
             </div>
+            <div class="introAndNumTop"><a href="chrome-extension://jbdfjoimaiokjhpdciagpoicekdampgk/donate.html" target="_blank">donate</a></div>
             <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
           </div>
           <!-- Write comment section -->
@@ -219,8 +220,8 @@ function process() {
   
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
-        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
+        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
         </div>
         `);
         } else {
@@ -257,6 +258,7 @@ function process() {
                 <span class="tooltiptext">Sort comments</span>
               </div> -->
             </div>
+            <div class="introAndNumTop"><a href="chrome-extension://jbdfjoimaiokjhpdciagpoicekdampgk/donate.html" target="_blank">donate</a></div>
             <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
           </div>
           <!-- Write comment section -->
@@ -289,8 +291,8 @@ function process() {
   
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
-        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
+        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
         </div>
         `);
         }
