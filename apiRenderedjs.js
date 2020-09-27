@@ -259,6 +259,27 @@ var uniqueID = $("#exportContent")
 
 vID = YouTubeGetID(vID);
 
+var settings = {
+  url:
+    "https://zw8w678x2d.execute-api.ap-southeast-2.amazonaws.com/dev/userLogin",
+  method: "POST",
+  timeout: 0,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  data: JSON.stringify({
+    userEmail: userEmail,
+    lastName: lastName,
+    firstName: firstName,
+    profilePicture: profilePicture,
+    uniqueID: uniqueID,
+  }),
+};
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
 // Tested URLs:
 // var url = 'http://youtube.googleapis.com/v/4e_kz79tjb8?version=3';
 // url = 'https://www.youtube.com/watch?feature=g-vrec&v=Y1xs_xPb46M';

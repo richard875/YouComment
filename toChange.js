@@ -163,8 +163,8 @@ function process() {
       />
         <link rel="stylesheet" ${
           isDark
-            ? 'href = "http://127.0.0.1:5500/stylesDark.css"'
-            : 'href = "http://127.0.0.1:5500/styles.css"'
+            ? 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"'
+            : 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'
         } / >
   
         <div id="bigCont" style="color: #030303">
@@ -222,8 +222,8 @@ function process() {
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
-        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
+        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
         </div>
         `);
         } else {
@@ -295,8 +295,8 @@ function process() {
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
         <!-- <script src="./apiRenderedjs.js"></script> -->
-        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
-        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        <!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script> -->
+        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script>
         </div>
         `);
         }
