@@ -163,8 +163,8 @@ function process() {
       />
         <link rel="stylesheet" ${
           isDark
-            ? 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"'
-            : 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'
+            ? 'href = "http://127.0.0.1:5500/stylesDark.css"'
+            : 'href = "http://127.0.0.1:5500/styles.css"'
         } / >
   
         <div id="bigCont" style="color: #030303">
@@ -187,7 +187,7 @@ function process() {
                 <span class="tooltiptext">Sort comments</span>
               </div> -->
             </div>
-            <div class="introAndNumTop"><a href="chrome-extension://jbdfjoimaiokjhpdciagpoicekdampgk/donate.html" target="_blank">donate</a></div>
+            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>
             <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
           </div>
           <!-- Write comment section -->
@@ -258,7 +258,7 @@ function process() {
                 <span class="tooltiptext">Sort comments</span>
               </div> -->
             </div>
-            <div class="introAndNumTop"><a href="chrome-extension://jbdfjoimaiokjhpdciagpoicekdampgk/donate.html" target="_blank">donate</a></div>
+            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>
             <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
           </div>
           <!-- Write comment section -->

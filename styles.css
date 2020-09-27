@@ -29,6 +29,11 @@
   /* background-color: aqua; */
 }
 
+.donateButton {
+  color: #085fd4;
+  text-decoration: none;
+}
+
 .sortByButton {
   color: #909090;
   margin-top: -0.2rem;
