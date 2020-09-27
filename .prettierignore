@@ -1,0 +1,3 @@
+# Ignore artifacts:
+apiRenderedjs.js
+toChange.js
