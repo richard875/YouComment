@@ -1,1 +1,321 @@
-var videoUrl=window.location.href;function wait(n){for(var e=(new Date).getTime(),t=e;t<e+n;)t=(new Date).getTime()}function YouTubeGetID(n){return void 0!==(n=n.replace(/(>|<)/gi,"").split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/))[2]?n[2].split(/[^0-9a-z_\-]/i)[0]:n}function mainFuction(){return new Promise(function(n,e){chrome.storage.sync.get("firstName",function(e){n(e.firstName)})})}function getLastName(){return new Promise(function(n,e){chrome.storage.sync.get("lastName",function(e){n(e.lastName)})})}function getPP(){return new Promise(function(n,e){chrome.storage.sync.get("profilePicture",function(e){n(e.profilePicture)})})}function getEmail(){return new Promise(function(n,e){chrome.storage.sync.get("userEmail",function(e){n(e.userEmail)})})}function getUniqueID(){return new Promise(function(n,e){chrome.storage.sync.get("uniqueID",function(e){n(e.uniqueID)})})}function process(){var n=window.location.href;$("#anIDNoOneWillEverThinkOf").length&&$("#anIDNoOneWillEverThinkOf").remove();setTimeout(async function(){var e=await mainFuction(),t=await getLastName(),i=await getPP(),s=await getEmail(),o=await getUniqueID();$("#anIDNoOneWillEverThinkOf").length&&$("#anIDNoOneWillEverThinkOf").remove();var a=$("html").attr("dark");($("ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span").length||"anIDNoOneWillEverThinkOf"===$("ytd-comments").children().eq(2).attr("id"))&&("no"===e&&"no"===t&&"no"===i&&"no"===s&&"no"===o?($("ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span").html("Please login to YouComment!"),$("ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > a").remove()):$("#anIDNoOneWillEverThinkOf").length?$("#anIDNoOneWillEverThinkOf").replaceWith(`\n        <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">\n        \x3c!-- Copy This --\x3e\n        <link\n        rel="stylesheet"\n        href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"\n      />\n        <link rel="stylesheet" ${a?'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"':'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'} / >\n  \n        <div id="bigCont" style="color: #030303">\n          \x3c!-- Export to Background --\x3e\n          <div id="exportContent">${n}</div>\n          <div id="${n}"></div>\n          <div id="${e}"></div>\n          <div id="${t}"></div>\n          <div id="${i}"></div>\n          <div id="${s}"></div>\n          <div id="${o}"></div>\n          \x3c!-- Finish Export to Background --\x3e\n          \x3c!-- Top Line --\x3e\n          <div class="introAndNum">\n            <div class="introAndNumTop">\n              <div id="commentNumber"></div>\n              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n              \x3c!-- <div class="sortByButton">\n                ☰&nbsp;&nbsp;SORT BY\n                <span class="tooltiptext">Sort comments</span>\n              </div> --\x3e\n            </div>\n            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>\n            <div class="introAndNumTop"><div>Powered by YouComment™</div></div>\n          </div>\n          \x3c!-- Write comment section --\x3e\n          <div class="addComment">\n            <div class="userProfileFrame">\n              <img\n                class="userProfilePicFrame"\n                src="${i}"\n              />\n            </div>\n            <div class="addCommentRight">\n              <textarea\n                placeholder="Add a public comment..."\n                class="commentInput"\n                id="commentInput"\n                onfocus="textAreaFocus(); textExpand(this)"\n              ></textarea>\n              <div class="runderline"></div>\n              <div id="commentButtonBox">\n                <div id="cancelButton">CANCEL</div>\n                <div id="commentButton">COMMENT</div>\n              </div>\n            </div>\n          </div>\n          \x3c!-- White space --\x3e\n          <div style="width: 100%; height: 2rem"></div>\n          \x3c!-- Comment Sections --\x3e\n          <div id="commentSection"></div>\n        </div>\n  \n        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"><\/script>\n        \x3c!-- Global site tag (gtag.js) - Google Analytics --\x3e\n        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"><\/script>\n        \x3c!-- <script src="./apiRenderedjs.js"><\/script> --\x3e\n        \x3c!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"><\/script> --\x3e\n        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"><\/script>\n        </div>\n        `):(console.log("it is"),$("ytd-comments").append(`\n        <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">\n        \x3c!-- Copy This --\x3e\n        <link\n        rel="stylesheet"\n        href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"\n      />\n        <link rel="stylesheet" ${a?'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"':'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'} / >\n  \n        <div id="bigCont" style="color: #030303">\n          \x3c!-- Export to Background --\x3e\n          <div id="exportContent"></div>\n          <div id="${n}"></div>\n          <div id="${e}"></div>\n          <div id="${t}"></div>\n          <div id="${i}"></div>\n          <div id="${s}"></div>\n          <div id="${o}"></div>\n          \x3c!-- Finish Export to Background --\x3e\n          \x3c!-- Top Line --\x3e\n          <div class="introAndNum">\n            <div class="introAndNumTop">\n              <div id="commentNumber"></div>\n              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n              \x3c!-- <div class="sortByButton">\n                ☰&nbsp;&nbsp;SORT BY\n                <span class="tooltiptext">Sort comments</span>\n              </div> --\x3e\n            </div>\n            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>\n            <div class="introAndNumTop"><div>Powered by YouComment™</div></div>\n          </div>\n          \x3c!-- Write comment section --\x3e\n          <div class="addComment">\n            <div class="userProfileFrame">\n              <img\n                class="userProfilePicFrame"\n                src="${i}"\n              />\n            </div>\n            <div class="addCommentRight">\n              <textarea\n                placeholder="Add a public comment..."\n                class="commentInput"\n                id="commentInput"\n                onfocus="textAreaFocus(); textExpand(this)"\n              ></textarea>\n              <div class="runderline"></div>\n              <div id="commentButtonBox">\n                <div id="cancelButton">CANCEL</div>\n                <div id="commentButton">COMMENT</div>\n              </div>\n            </div>\n          </div>\n          \x3c!-- White space --\x3e\n          <div style="width: 100%; height: 2rem"></div>\n          \x3c!-- Comment Sections --\x3e\n          <div id="commentSection"></div>\n        </div>\n  \n        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"><\/script>\n        \x3c!-- Global site tag (gtag.js) - Google Analytics --\x3e\n        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"><\/script>\n        \x3c!-- <script src="./apiRenderedjs.js"><\/script> --\x3e\n        \x3c!-- <script src="http://127.0.0.1:5500/apiRenderedjs.js"><\/script> --\x3e\n        <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"><\/script>\n        </div>\n        `)))},500)}chrome.extension.onMessage.addListener(function(n,e,t){return"getDoc"===n.type&&$(function(){var n=window.location.href,e=!0;$(window).scroll(function(){$(this).scrollTop()>=300&&e&&(e=!1,11===YouTubeGetID(n).length&&($("#anIDNoOneWillEverThinkOf").length&&$("#anIDNoOneWillEverThinkOf").remove(),console.log("Once"),wait(300),process(),t(document.body.innerHTML)))})}),!0});
+var videoUrl = window.location.href;
+
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
+chrome.extension.onMessage.addListener(function (request, sender, response) {
+  if (request.type === "getDoc") {
+    //alert("git it!");
+    $(function () {
+      var videoUrl = window.location.href;
+      var triggerOnceforShare = true;
+      $(window).scroll(function () {
+        if ($(this).scrollTop() >= 300 && triggerOnceforShare) {
+          triggerOnceforShare = false;
+          //alert(YouTubeGetID(videoUrl).length);
+          if (YouTubeGetID(videoUrl).length === 11) {
+            if ($("#anIDNoOneWillEverThinkOf").length) {
+              $("#anIDNoOneWillEverThinkOf").remove();
+            }
+            //alert("ad just passed.");
+            console.log("Once");
+            wait(300);
+            process();
+            response(document.body.innerHTML);
+          }
+        }
+      });
+    });
+  }
+
+  return true;
+});
+
+// window.addEventListener("yt-navigate-start", process);
+
+// if (document.body) process();
+// else document.addEventListener("DOMContentLoaded", process);
+
+//Get YouTube ID from various YouTube URL
+function YouTubeGetID(url) {
+  var ID = "";
+  url = url
+    .replace(/(>|<)/gi, "")
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if (url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  } else {
+    ID = url;
+  }
+  return ID;
+}
+
+function mainFuction() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("firstName", function (options) {
+      resolve(options.firstName);
+    });
+  });
+}
+
+function getLastName() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("lastName", function (options) {
+      resolve(options.lastName);
+    });
+  });
+}
+
+function getPP() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("profilePicture", function (options) {
+      resolve(options.profilePicture);
+    });
+  });
+}
+
+function getEmail() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("userEmail", function (options) {
+      resolve(options.userEmail);
+    });
+  });
+}
+
+function getUniqueID() {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.sync.get("uniqueID", function (options) {
+      resolve(options.uniqueID);
+    });
+  });
+}
+
+function process() {
+  var url = window.location.href;
+  //alert(url);
+
+  //$("ytd-comments").replaceWith($("ytd-comments"));
+  // $("#idkidkidk").replaceWith(`<div id="idkidkidk">${url}</div>`);
+
+  // $("#anIDNoOneWillEverThinkOf").replaceWith(
+  //   `<div id="anIDNoOneWillEverThinkOf"></div>`
+  // );
+  if ($("#anIDNoOneWillEverThinkOf").length) {
+    $("#anIDNoOneWillEverThinkOf").remove();
+  }
+
+  var checkExist = setTimeout(async function () {
+    var firstName = await mainFuction();
+    var lastName = await getLastName();
+    var profilePicture = await getPP();
+    var userEmail = await getEmail();
+    var uniqueID = await getUniqueID();
+    //alert(firstName + lastName + profilePicture + userEmail + uniqueID);
+
+    if ($("#anIDNoOneWillEverThinkOf").length) {
+      $("#anIDNoOneWillEverThinkOf").remove();
+    }
+
+    var isDark = $("html").attr("dark");
+
+    if (
+      $(
+        "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
+      ).length ||
+      $("ytd-comments").children().eq(2).attr("id") ===
+        "anIDNoOneWillEverThinkOf"
+    ) {
+      //clearInterval(checkExist);
+      //console.log("Exists!");
+      // var str =
+      //   $(
+      //     "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
+      //   ).text() === "Comments are turned off. ";
+      //console.log(str);
+      if (
+        firstName === "no" &&
+        lastName === "no" &&
+        profilePicture === "no" &&
+        userEmail === "no" &&
+        uniqueID === "no"
+      ) {
+        $(
+          "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > span"
+        ).html("Please login to YouComment!");
+        $(
+          "ytd-comments > ytd-item-section-renderer > #contents > ytd-message-renderer > yt-formatted-string > a"
+        ).remove();
+      } else {
+        if (!$("#anIDNoOneWillEverThinkOf").length) {
+          console.log("it is");
+          $("ytd-comments").append(`
+        <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">
+        <!-- Copy This -->
+        <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+      />
+        <link rel="stylesheet" ${
+          isDark
+            ? 'href = "http://127.0.0.1:5500/stylesDark.css"'
+            : 'href = "http://127.0.0.1:5500/styles.css"'
+        } / >
+  
+        <div id="bigCont" style="color: #030303; overflow-x: hidden; overflow-y: hidden;">
+          <!-- Export to Background -->
+          <div id="exportContent"></div>
+          <div id="${url}"></div>
+          <div id="${firstName}"></div>
+          <div id="${lastName}"></div>
+          <div id="${profilePicture}"></div>
+          <div id="${userEmail}"></div>
+          <div id="${uniqueID}"></div>
+          <!-- Finish Export to Background -->
+          <!-- Top Line -->
+          <div class="introAndNum">
+            <div class="introAndNumTop">
+              <div id="commentNumber"></div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <!-- <div class="sortByButton">
+                ☰&nbsp;&nbsp;SORT BY
+                <span class="tooltiptext">Sort comments</span>
+              </div> -->
+            </div>
+            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>
+            <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
+          </div>
+          <!-- Write comment section -->
+          <div class="addComment">
+            <div class="userProfileFrame">
+              <img
+                class="userProfilePicFrame"
+                src="${profilePicture}"
+              />
+            </div>
+            <div class="addCommentRight">
+              <textarea
+                placeholder="Add a public comment..."
+                class="commentInput"
+                id="commentInput"
+                onfocus="textAreaFocus(); textExpand(this)"
+              ></textarea>
+              <div class="runderline"></div>
+              <div id="commentButtonBox">
+                <div id="cancelButton">CANCEL</div>
+                <div id="commentButton">COMMENT</div>
+              </div>
+            </div>
+          </div>
+          <!-- White space -->
+          <div style="width: 100%; height: 2rem"></div>
+          <!-- Comment Sections -->
+          <div id="commentSection">
+            <div hidden id="loader" class="loader">
+                <svg class="circular" viewBox="25 25 50 50">
+                    <circle
+                        class="path"
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        stroke-width="2"
+                        stroke-miterlimit="10"
+                    />
+                </svg>
+            </div>
+          </div>
+        </div>
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
+        <!-- <script src="./apiRenderedjs.js"></script> -->
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        </div>
+        `);
+        } else {
+          $("#anIDNoOneWillEverThinkOf").replaceWith(`
+        <div class="anIDNoOneWillEverThinkOf" id="anIDNoOneWillEverThinkOf">
+        <!-- Copy This -->
+        <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+      />
+        <link rel="stylesheet" ${
+          isDark
+            ? 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/stylesDark.css"'
+            : 'href = "https://youcomment-files.s3-ap-southeast-2.amazonaws.com/styles.css"'
+        } / >
+  
+        <div id="bigCont" style="color: #030303">
+          <!-- Export to Background -->
+          <div id="exportContent">${url}</div>
+          <div id="${url}"></div>
+          <div id="${firstName}"></div>
+          <div id="${lastName}"></div>
+          <div id="${profilePicture}"></div>
+          <div id="${userEmail}"></div>
+          <div id="${uniqueID}"></div>
+          <!-- Finish Export to Background -->
+          <!-- Top Line -->
+          <div class="introAndNum">
+            <div class="introAndNumTop">
+              <div id="commentNumber"></div>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <!-- <div class="sortByButton">
+                ☰&nbsp;&nbsp;SORT BY
+                <span class="tooltiptext">Sort comments</span>
+              </div> -->
+            </div>
+            <div class="introAndNumTop"><a class="donateButton" href="https://nervous-curie-029dd6.netlify.app/" target="_blank">Donate!</a></div>
+            <div class="introAndNumTop"><div>Powered by YouComment™</div></div>
+          </div>
+          <!-- Write comment section -->
+          <div class="addComment">
+            <div class="userProfileFrame">
+              <img
+                class="userProfilePicFrame"
+                src="${profilePicture}"
+              />
+            </div>
+            <div class="addCommentRight">
+              <textarea
+                placeholder="Add a public comment..."
+                class="commentInput"
+                id="commentInput"
+                onfocus="textAreaFocus(); textExpand(this)"
+              ></textarea>
+              <div class="runderline"></div>
+              <div id="commentButtonBox">
+                <div id="cancelButton">CANCEL</div>
+                <div id="commentButton">COMMENT</div>
+              </div>
+            </div>
+          </div>
+          <!-- White space -->
+          <div style="width: 100%; height: 2rem"></div>
+          <!-- Comment Sections -->
+          <div id="commentSection"></div>
+        </div>
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170975862-4"></script>
+        <!-- <script src="./apiRenderedjs.js"></script> -->
+        <script src="http://127.0.0.1:5500/apiRenderedjs.js"></script>
+        <!-- <script src="https://youcomment-files.s3-ap-southeast-2.amazonaws.com/apiRenderedjs.js"></script> -->
+        </div>
+        `);
+        }
+      }
+      //clearInterval(checkExist);
+    }
+  }, 500); // check every 100ms
+}
