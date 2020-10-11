@@ -1,3 +1,40 @@
+function commRipp() {
+  $(".commentBut").click(function (e) {
+    // Remove any old one
+    $(".ripple").remove();
+
+    // Setup
+    var posX = $(this).offset().left,
+      posY = $(this).offset().top,
+      buttonWidth = $(this).width(),
+      buttonHeight = $(this).height();
+
+    // Add the element
+    $(this).append("<div class='ripple'></div>");
+
+    // Make it round!
+    if (buttonWidth >= buttonHeight) {
+      buttonHeight = buttonWidth;
+    } else {
+      buttonWidth = buttonHeight;
+    }
+
+    // Get the center of the element
+    var x = e.pageX - posX - buttonWidth / 2;
+    var y = e.pageY - posY - buttonHeight / 2;
+
+    // Add the ripples CSS and start the animation
+    $(".ripple")
+      .css({
+        width: buttonWidth,
+        height: buttonHeight,
+        top: y + "px",
+        left: x + "px",
+      })
+      .addClass("rippleEffect");
+  });
+}
+
 window.dataLayer = window.dataLayer || [];
 function gtag() {
   dataLayer.push(arguments);
@@ -401,7 +438,7 @@ function fetchData() {
                     <div class="replyCancelButton" onclick="replyCancel(this)">
                       CANCEL
                     </div>
-                    <div id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
+                    <div class="commentBut" id="commentButton" style="width: 80px;" onclick="replyOnComment(this)">
                       REPLY
                     </div>
                   </div>
@@ -544,7 +581,7 @@ function fetchData() {
                   <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
                     CANCEL
                   </div>
-                  <div id="commentButton" onclick="newReplyComment(this)">
+                  <div class="commentBut" id="commentButton" onclick="newReplyComment(this)">
                     COMMENT
                   </div>
                 </div>
@@ -564,6 +601,7 @@ function fetchData() {
         spinner.setAttribute("hidden", "");
       }, 2000);
       $(`#commentSection`).prepend(rendered);
+      commRipp();
     })
     .catch(function (error) {
       console.log(JSON.stringify(error));
@@ -684,7 +722,7 @@ function editComment(e) {
           <div class="replyCancelButton" onclick="cancelEdit(this)">
             CANCEL
           </div>
-          <div id="commentButton" style="width: 80px;" onclick="confirmEdit(this)">
+          <div class="commentBut" id="commentButton" style="width: 80px;" onclick="confirmEdit(this)">
             EDIT
           </div>
         </div>
@@ -692,6 +730,7 @@ function editComment(e) {
     </div>
   `);
     $(e).parent().prev().children().eq(1).children().eq(0).focus();
+    commRipp();
   }
 }
 
@@ -948,7 +987,7 @@ function replyOnComment(e) {
           <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
             CANCEL
           </div>
-          <div id="commentButton" onclick="newReplyComment(this)">
+          <div class="commentBut" id="commentButton" onclick="newReplyComment(this)">
             COMMENT
           </div>
         </div>
@@ -961,6 +1000,7 @@ function replyOnComment(e) {
       $(e).parent().prev().prev().val("");
       $(e).parent().prev().prev().css("height", "2rem");
       $(e).parent().parent().parent().css("display", "none");
+      commRipp();
       //showReplies($(e).parent().parent().parent().next().next().next().next());
     });
 
@@ -1151,7 +1191,7 @@ function newReplyComment(e) {
           <div class="replyReplyCancelButton" onclick="replyCancelWithComment(this)">
             CANCEL
           </div>
-          <div id="commentButton" onclick="newReplyComment(this)">
+          <div class="commentBut" id="commentButton" onclick="newReplyComment(this)">
             COMMENT
           </div>
         </div>
@@ -1165,6 +1205,7 @@ function newReplyComment(e) {
       $(e).parent().prev().prev().css("height", "2rem");
       $(e).parent().parent().parent().css("display", "none");
       $(e).parent().parent().parent().prev().html("");
+      commRipp();
     });
     // if ($(".replyCommentBox").height() < 134.391) {
     //   $(".repReadMore").css("display", "none");

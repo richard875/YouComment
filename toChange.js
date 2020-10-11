@@ -208,7 +208,7 @@ function process() {
               <div class="runderline"></div>
               <div id="commentButtonBox">
                 <div id="cancelButton">CANCEL</div>
-                <div id="commentButton">COMMENT</div>
+                <div class="commentBut" id="commentButton">COMMENT</div>
               </div>
             </div>
           </div>

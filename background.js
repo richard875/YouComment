@@ -134,6 +134,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               function () {
                 user_signed_in = true;
                 sendResponse("success");
+                chrome.tabs.query(
+                  { active: true, currentWindow: true },
+                  function (tabs) {
+                    chrome.tabs.update(tabs[0].id, { url: tabs[0].url });
+                  }
+                );
               }
             );
           } else {
@@ -153,6 +159,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       chrome.storage.sync.set({ userEmail: "no" });
       chrome.storage.sync.set({ uniqueID: "no" });
       sendResponse("success");
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.update(tabs[0].id, { url: tabs[0].url });
+      });
     });
 
     return true;
